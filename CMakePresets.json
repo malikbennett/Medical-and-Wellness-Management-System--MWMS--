@@ -2,26 +2,14 @@
     "version": 8,
     "configurePresets": [
         {
-            "name": "linux-gcc",
+            "name": "linux-default",
             "displayName": "GCC 11.4.0 x86_64-linux-gnu",
             "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
-            "generator": "Unix Makefiles",
-            "binaryDir": "${sourceDir}/build/${presetName}",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
             "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
                 "CMAKE_C_COMPILER": "/usr/bin/gcc",
                 "CMAKE_CXX_COMPILER": "/usr/bin/g++",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "windows-msvc",
-            "displayName": "MSVC 2022 (NMake)",
-            "description": "Using MSVC with NMake Makefiles",
-            "generator": "NMake Makefiles",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_PREFIX_PATH": "C:/Qt/5.15/msvc2019_64",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
