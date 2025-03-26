@@ -3,6 +3,7 @@
 A C++ Medical and Wellness Management System (MWMS) for UTech Medical Centre, automating patient records, appointment scheduling, and medical professional management through a secure, role-based digital platform.
 
 ## Table of Contents
+
 - [Prerequisites](#prerequisites)
 - [Installing Dependencies](#installing-dependencies)
   - [Linux](#linux)
@@ -18,11 +19,13 @@ A C++ Medical and Wellness Management System (MWMS) for UTech Medical Centre, au
 ## Prerequisites
 
 ### Linux:
+
 - GCC (version 11.4 or later)
 - wxWidgets (3.1.5 or later)
 - CMake (version 3.10 or later)
 
 ### Windows:
+
 - MinGW-w64 (version 8.1.0 or later)
 - wxWidgets (3.1.5 or later)
 - CMake (version 3.10 or later)
@@ -30,19 +33,23 @@ A C++ Medical and Wellness Management System (MWMS) for UTech Medical Centre, au
 ## Installing Dependencies
 
 ### Linux (Debian-based)
+
 ```bash
 sudo apt update
 sudo apt install build-essential libwxgtk3.0-gtk3-dev cmake
 ```
 
 ### Windows
+
 1. **Install MinGW-w64**:
+
    - Download from [MSYS2](https://www.msys2.org/)
    - Run the installer and follow the prompts
    - Update packages: `pacman -Syu`
    - Install MinGW: `pacman -S mingw-w64-x86_64-toolchain`
 
 2. **Install wxWidgets**:
+
    - Download from [wxWidgets Downloads](https://www.wxwidgets.org/downloads/)
    - Build from source or use pre-built binaries
    - Set environment variable: `WXWIN=C:\wxWidgets-3.1.5`
@@ -52,6 +59,7 @@ sudo apt install build-essential libwxgtk3.0-gtk3-dev cmake
    - Add CMake to your system PATH
 
 ## Setting Up the Project
+
 ```bash
 git clone https://github.com/malikbennett/Medical-and-Wellness-Management-System--MWMS--.git
 cd Medical-and-Wellness-Management-System--MWMS--
@@ -60,27 +68,31 @@ cd Medical-and-Wellness-Management-System--MWMS--
 ## Configure and Build the Project
 
 ### Linux
+
 ```bash
-mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j$(nproc)
+mkdir build && cd build/
+cmake ..
+make
 ```
 
 ### Windows
+
 ```cmd
-mkdir build && cd build
+mkdir build && cd build/
 cmake -G "MinGW Makefiles" ..
-mingw32-make -j%NUMBER_OF_PROCESSORS%
+mingw32-make
 ```
 
 ## Running the Application
 
 ### Linux:
+
 ```bash
 ./build/MWMS
 ```
 
 ### Windows:
+
 ```cmd
 build\MWMS.exe
 ```
@@ -90,16 +102,19 @@ build\MWMS.exe
 The project includes `CMakePresets.json` for simplified configuration:
 
 ### Linux:
+
 ```bash
-cmake --preset=linux-gcc
+cmake --preset=linux-default
 ```
 
 ### Windows:
+
 ```cmd
-cmake --preset=windows-mingw
+cmake --preset=windows-default
 ```
 
 ## Notes
+
 - For first-time wxWidgets setup on Windows, you may need to:
   ```cmd
   set PATH=%WXWIN%\lib\gcc_dll;%PATH%

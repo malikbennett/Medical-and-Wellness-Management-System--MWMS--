@@ -5,11 +5,27 @@
             "name": "linux-default",
             "displayName": "GCC 11.4.0 x86_64-linux-gnu",
             "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}",
+                "CMAKE_PREFIX_PATH": "/usr/local",
                 "CMAKE_C_COMPILER": "/usr/bin/gcc",
                 "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "wxWidgets_CONFIG_OPTIONS": "--toolkit=gtk3",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "windows-default",
+            "displayName": "MinGW-w64 windows c++",
+            "description": "Build using MinGW-w64",
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}",
+                "CMAKE_PREFIX_PATH": "C:/wxWidgets-3.1.5",
+                "wxWidgets_ROOT_DIR": "C:/wxWidgets-3.1.5",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
