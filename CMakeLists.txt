@@ -5,12 +5,14 @@ include_directories(include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(SOURCES
-    src/gui/mainframe.cpp
-    src/gui/app.cpp
+    src/app.cpp
+    src/settings.cpp
+    src/ui/mainframe.cpp
 )
 
 set(INCLUDES
-    include/gui
+    include/core
+    include/ui
     include/
 )
 
