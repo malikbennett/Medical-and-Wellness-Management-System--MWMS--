@@ -2,6 +2,8 @@
 
 using namespace std;
 
+#include <string>
+
 class Role{
 private:
     // unique roleID

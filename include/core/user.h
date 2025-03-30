@@ -1,8 +1,8 @@
 // User class definition
 #pragma once
 
-
 #include <role.h>
+#include <string>
 
 using namespace std;
 
@@ -11,7 +11,7 @@ class User
 {
 public:
     // User constructor
-    User(int userNumber, string username, string password);
+    User(int userNumber, const string &username,const string& password);
      // returns the user's userID
     int getUserNumber() const;
      // prints user details

@@ -3,6 +3,7 @@
 #include <app.h>
 #include <mainframe.h>
 #include <settings.h>
+#include <user.h>
 
  // This function starts the main function (Needed for program to run)
 wxIMPLEMENT_APP(App);
@@ -22,6 +23,9 @@ bool App::OnInit(){
     mainFrame->SetClientSize(width, height);
     // Centers window
     mainFrame->Center();
+
+    User *user = new User(0,"malikbennett","malik");
+    user->show();
 
     return true;
 }

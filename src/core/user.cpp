@@ -4,9 +4,9 @@
 #include <stdexcept>
 #include <iostream>
 
-User::User(int userNum, string username, string password)
+User::User(int userNumber, const string &username,const string& password)
 {
-    setUserNumber(userNum);
+    setUserNumber(userNumber);
     this->username = username;
     this->password = password;
 }
@@ -16,13 +16,13 @@ int User::getUserNumber() const
     return userNumber;
 }
 
-void User::setUserNumber(int num)
+void User::setUserNumber(int userNumber)
 {
     try
     {
-        if (num >= 0 && num <= 99999)
+        if (userNumber >= 0 && userNumber <= 99999)
         {
-            this->userNumber = num;
+            this->userNumber = userNumber;
         }
         else
         {
