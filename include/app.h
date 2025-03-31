@@ -7,6 +7,8 @@ using namespace std;
 class App : public wxApp
 {
 public:
+    App();
+    ~App();
     // Initial app setup, this is called to set window attributes and other main logic
-    bool OnInit();
+    virtual bool OnInit();
 };

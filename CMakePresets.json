@@ -3,12 +3,12 @@
     "configurePresets": [
         {
             "name": "linux-default",
-            "displayName": "GCC 11.4.0 x86_64-linux-gnu",
+            "displayName": "debug",
             "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
             "generator": "Unix Makefiles",
-            "binaryDir": "${sourceDir}/build/",
+            "binaryDir": "${sourceDir}/build/debug",
             "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/debug/install/",
                 "CMAKE_PREFIX_PATH": "/usr/local",
                 "CMAKE_C_COMPILER": "/usr/bin/gcc",
                 "CMAKE_CXX_COMPILER": "/usr/bin/g++",
@@ -17,16 +17,44 @@
             }
         },
         {
+            "name": "linux-default",
+            "displayName": "release",
+            "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build/release",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/release/install",
+                "CMAKE_PREFIX_PATH": "/usr/local",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "wxWidgets_CONFIG_OPTIONS": "--toolkit=gtk3",
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
             "name": "windows-default",
-            "displayName": "MinGW-w64 windows c++",
+            "displayName": "debug",
             "description": "Build using MinGW-w64",
             "generator": "MinGW Makefiles",
-            "binaryDir": "${sourceDir}/build/",
+            "binaryDir": "${sourceDir}\\build\\debug",
             "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/",
-                "CMAKE_PREFIX_PATH": "C:/wxWidgets-3.1.5",
-                "wxWidgets_ROOT_DIR": "C:/wxWidgets-3.1.5",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}\\build\\debug\\install",
+                "CMAKE_PREFIX_PATH": "C:\\wxWidgets-3.1.5",
+                "wxWidgets_ROOT_DIR": "C:\\wxWidgets-3.1.5",
                 "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "windows-default",
+            "displayName": "release",
+            "description": "Build using MinGW-w64",
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}\\build\\release",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}\\build\\release\\install",
+                "CMAKE_PREFIX_PATH": "C:\\wxWidgets-3.1.5",
+                "wxWidgets_ROOT_DIR": "C:\\wxWidgets-3.1.5",
+                "CMAKE_BUILD_TYPE": "Release"
             }
         }
     ]

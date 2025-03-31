@@ -1,12 +1,17 @@
-// This is the main file that you'd normally be used to //
+// This is the main driver file that you'd normally be used to //
 
 #include <app.h>
 #include <mainframe.h>
 #include <settings.h>
 #include <user.h>
+#include <encryption.h>
+#include <iostream>
 
- // This function starts the main function (Needed for program to run)
+// This function starts the main function (Needed for program to run)
 wxIMPLEMENT_APP(App);
+
+App::App(){}
+App::~App(){}
 
 bool App::OnInit(){
     // Get window values from settings manager
@@ -23,9 +28,6 @@ bool App::OnInit(){
     mainFrame->SetClientSize(width, height);
     // Centers window
     mainFrame->Center();
-
-    User *user = new User(0,"malikbennett","malik");
-    user->show();
 
     return true;
 }

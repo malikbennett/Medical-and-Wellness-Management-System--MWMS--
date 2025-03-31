@@ -4,21 +4,22 @@
 
 using namespace std;
 
+// Singleton Class which Handles basic XOR Enryption
 class Encrypt
 {
 public:
+    // Returns an instance of Encrypt Class which belongs to the class itself
     static Encrypt& getInstance(){
         static Encrypt instance;
         return instance;
     }
-    string encryptDecrypt(const string &text, char key)
+    // Encrypt or Decrypy a text using a key with the XOR operator
+    void encryptDecrypt(string &text, char key)
     {
-        string result = text;
-        for (char &c : result)
+        for (char &c : text)
         {
-            c ^= key; // XOR each character with the key
+            c ^= key;
         }
-        return result;
     }
 private:
     Encrypt() {};

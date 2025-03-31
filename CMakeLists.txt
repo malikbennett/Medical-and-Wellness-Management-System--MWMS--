@@ -14,7 +14,6 @@ set(INCLUDES
     include/core
     include/ui
     include/utilities
-    include/
 )
 
 find_package(wxWidgets REQUIRED COMPONENTS core base)
