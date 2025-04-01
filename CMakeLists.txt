@@ -8,11 +8,14 @@ set(SOURCES
     src/app.cpp
     src/ui/mainframe.cpp
     src/core/user.cpp
+    src/ui/panels/homepanel.cpp
+    src/ui/panels/loginpanel.cpp
 )
 
 set(INCLUDES
     include/core
     include/ui
+    include/ui/panels
     include/utilities
 )
 

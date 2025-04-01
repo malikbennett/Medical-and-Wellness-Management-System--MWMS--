@@ -1,7 +1,6 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <wx/config.h>
 
 using namespace std;
 
@@ -25,9 +24,13 @@ public:
   /*returns window title*/
   string getWindowTitle() { return this->windowTitle; };
   /*returns window background color*/
-  string getBackgroundColor() const { return backgroundColor; }
+  string getBackgroundColor() const { return this->backgroundColor; }
   /*returns text color*/
-  string getTextColor() const { return textColor; }
+  string getTextColor() const { return this->textColor; }
+  /*returns primary color*/
+  string getPrimaryColor() const { return this->primaryColor; }
+  /*returns secondary color*/
+  string getSecondaryColor() const { return this->secondaryColor; }
 
 private:
   // Private constructer; no instances can be made
@@ -38,6 +41,8 @@ private:
   string windowTitle = "MWMS";
   int windowWidth = 1280;
   int windowHeight = 720;
-  string backgroundColor = "#FFFFFF";
-  string textColor = "#000000";
+  string backgroundColor = "#FFFCE8";
+  string textColor = "#25283D";
+  string primaryColor = "#7180B9";
+  string secondaryColor = "#32965D";
 };
