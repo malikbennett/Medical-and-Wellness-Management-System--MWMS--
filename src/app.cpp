@@ -28,6 +28,5 @@ bool App::OnInit(){
     mainFrame->SetClientSize(width, height);
     // Centers window
     mainFrame->Center();
-
     return true;
 }
