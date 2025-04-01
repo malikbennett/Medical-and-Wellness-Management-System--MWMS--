@@ -1,4 +1,4 @@
-#include <loginpanel.h>
+#include <LoginPanel.h>
 
 LoginPanel::LoginPanel(wxWindow* parent) : wxPanel(parent) {
     new wxStaticText(this, wxID_ANY, "Login", wxPoint(20, 20));

@@ -1,10 +1,10 @@
 // This is the main driver file that you'd normally be used to //
 
-#include <app.h>
-#include <mainframe.h>
-#include <settings.h>
-#include <user.h>
-#include <encryption.h>
+#include <App.h>
+#include <MainFrame.h>
+#include <Settings.h>
+#include <User.h>
+#include <Encryption.h>
 #include <iostream>
 
 // This function starts the main function (Needed for program to run)

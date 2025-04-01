@@ -5,11 +5,11 @@ include_directories(include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(SOURCES
-    src/app.cpp
-    src/ui/mainframe.cpp
-    src/core/user.cpp
-    src/ui/panels/homepanel.cpp
-    src/ui/panels/loginpanel.cpp
+    src/App.cpp
+    src/ui/MainFrame.cpp
+    src/core/User.cpp
+    src/ui/panels/HomePanel.cpp
+    src/ui/panels/LoginPanel.cpp
 )
 
 set(INCLUDES

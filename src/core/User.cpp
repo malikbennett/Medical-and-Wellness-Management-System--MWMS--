@@ -1,6 +1,6 @@
 // User class implementation
 
-#include <user.h>
+#include <User.h>
 #include <stdexcept>
 #include <iostream>
 
