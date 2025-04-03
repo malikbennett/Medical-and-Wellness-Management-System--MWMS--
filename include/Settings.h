@@ -24,13 +24,13 @@ public:
   /*returns window title*/
   string getWindowTitle() { return this->windowTitle; };
   /*returns window background color*/
-  string getBackgroundColor() const { return this->backgroundColor; }
+  string getBackgroundColor(bool FORMAT) const { return (FORMAT) ? this->backgroundColorRGB : this->backgroundColorHEX; }
   /*returns text color*/
-  string getTextColor() const { return this->textColor; }
+  string getTextColor(bool FORMAT) const { return (FORMAT) ? this->textColorRGB : this->textColorHEX; }
   /*returns primary color*/
-  string getPrimaryColor() const { return this->primaryColor; }
+  string getPrimaryColor(bool FORMAT) const { return (FORMAT) ? this->primaryColorRGB : this->primaryColorHEX; }
   /*returns secondary color*/
-  string getSecondaryColor() const { return this->secondaryColor; }
+  string getSecondaryColor(bool FORMAT) const { return (FORMAT) ? this->secondaryColorRGB : this->secondaryColorHEX; }
 
 private:
   // Private constructer; no instances can be made
@@ -41,8 +41,13 @@ private:
   string windowTitle = "MWMS";
   int windowWidth = 1280;
   int windowHeight = 720;
-  string backgroundColor = "#FFFCE8";
-  string textColor = "#25283D";
-  string primaryColor = "#7180B9";
-  string secondaryColor = "#32965D";
+  string backgroundColorHEX = "#FFFCE8";
+  string backgroundColorRGB = "255,252,232";
+  string textColorHEX = "#25283D";
+  string textColorRGB = "37,40,61";
+  string primaryColorHEX = "#7180B9";
+  string primaryColorRGB = "113,128,185";
+  string secondaryColorHEX = "#32965D";
+  string secondaryColorRGB = "50,150,93";
+
 };
