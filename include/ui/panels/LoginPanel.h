@@ -7,5 +7,5 @@ class LoginPanel : public wxPanel{
 public:
     LoginPanel(wxWindow* parent);
 private:
-    void onLogin();
+    void onLogin(wxCommandEvent& event);
 };
