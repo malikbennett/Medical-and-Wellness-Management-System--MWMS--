@@ -113,7 +113,7 @@ cmake --preset=linux-default
 cmake --preset=windows-default
 ```
 
-## Notes
+## Build Notes
 
 - For first-time wxWidgets setup on Windows, you may need to:
   ```cmd
@@ -121,3 +121,35 @@ cmake --preset=windows-default
   ```
 - To enable debug builds, use `-DCMAKE_BUILD_TYPE=Debug`
 - Ensure all build directories are cleaned when switching configurations
+
+## User Logins
+
+- Password for all users: password
+
+1. _Admin_
+
+- Username: admin
+
+2. _Doctor_
+
+- Username: doctor
+
+3. _Nurse_
+
+- Username: nurse
+
+4. _Dietitian_
+
+- Username: dietitian
+
+5. _Psychologist/Councillor_
+
+- Username: psychologist
+
+6. _Receptionist_
+
+- Username: receptionist
+
+7. _Patient_
+
+- Username: patient
