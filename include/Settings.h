@@ -24,13 +24,13 @@ public:
   /*returns window title*/
   string getWindowTitle() { return this->windowTitle; };
   /*returns window background color*/
-  wxColor &getBackgroundColor(bool FORMAT) const { return *this->backgroundColor; }
+  wxColor &getBackgroundColor() const { return *this->backgroundColor; }
   /*returns text color*/
-  wxColor &getTextColor(bool FORMAT) const { return *this->textColor; }
+  wxColor &getTextColor() const { return *this->textColor; }
   /*returns primary color*/
-  wxColor &getPrimaryColor(bool FORMAT) const { return *this->primaryColor; }
+  wxColor &getPrimaryColor() const { return *this->primaryColor; }
   /*returns secondary color*/
-  wxColor &getSecondaryColor(bool FORMAT) const { return *this->secondaryColor; }
+  wxColor &getSecondaryColor() const { return *this->secondaryColor; }
 
 private:
   // Private constructer; no instances can be made

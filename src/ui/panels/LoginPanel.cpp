@@ -1,4 +1,6 @@
 #include <LoginPanel.h>
+#include <Session.h>
+#include <Settings.h>
 
 LoginPanel::LoginPanel(wxWindow* parent) : wxPanel(parent) {
     new wxStaticText(this, wxID_ANY, "Login", wxPoint(20, 20));
@@ -19,4 +21,11 @@ LoginPanel::LoginPanel(wxWindow* parent) : wxPanel(parent) {
     wxChoice *roleOptions = new wxChoice(this, wxID_ANY, wxPoint(100, 260), wxSize(100, -1), roles);
     roleOptions->Select(6);
     wxButton* loginBtn = new wxButton(this, wxID_OK, "Login", wxPoint(20, 300));
+
+LoginPanel::LoginPanel(wxFrame *parentFrame) : wxPanel(parentFrame){}
+
+void LoginPanel::onLogin(wxCommandEvent &event)
+{
+    wxMessageBox("Login Clicked!");
+    // Session::SetCurrentUser();
 }

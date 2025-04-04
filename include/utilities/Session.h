@@ -3,7 +3,9 @@
 
 class Session {
 public:
+    // Return the current active user in session
     static User* GetCurrentUser();
+    // Logs in the respective user in session
     static void SetCurrentUser(int userId, const std::string& username, const std::string& password);
     static void Logout();
 

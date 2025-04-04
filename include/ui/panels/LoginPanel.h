@@ -5,7 +5,8 @@
 // Class that displays the login panel/screen
 class LoginPanel : public wxPanel{
 public:
-    LoginPanel(wxWindow* parent);
+    LoginPanel(wxPanel* parentPanel);
+    LoginPanel(wxFrame* parentFrame);
 private:
     void onLogin(wxCommandEvent& event);
 };

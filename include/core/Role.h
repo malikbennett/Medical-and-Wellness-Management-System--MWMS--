@@ -4,8 +4,7 @@ using namespace std;
 
 #include <string>
 
-class Role{
-private:
+struct Role{
     // unique roleID
     int roleNumber;
     // name of the role

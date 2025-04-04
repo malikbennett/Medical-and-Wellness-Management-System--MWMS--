@@ -3,6 +3,7 @@
 #include <User.h>
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
 
 User::User(int userNumber, const string &username,const string& password)
 {
