@@ -4,6 +4,7 @@
 #include <User.h>
 #include <Role.h>
 #include <iostream>
+#include <Settings.h>
 
 // Inlcudes Panels
 
@@ -11,5 +12,13 @@
 #include <HomePanel.h>
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title){
-    new LoginPanel(this);
+    // Main Panel for the window/frame
+    this->mainPanel= new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(200,100));
+    this->mainPanel->SetBackgroundColour(Settings::getInstance().colors.background);
+    this->mainSizer = new wxBoxSizer(wxVERTICAL);
+    this->mainSizer->Add(mainPanel,1, wxEXPAND | wxALL);
+
+    new LoginPanel(this->mainPanel);
+
+    this->SetSizerAndFit(mainSizer);
 }

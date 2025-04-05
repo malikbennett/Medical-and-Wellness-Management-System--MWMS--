@@ -9,5 +9,9 @@ class MainFrame : public wxFrame
 public:
     // MainFrame's constructor, this intializes the window and its attributes
     MainFrame(const wxString &title);
+
+private:
+    wxPanel *mainPanel;
+    wxBoxSizer *mainSizer;
 };
 #endif
