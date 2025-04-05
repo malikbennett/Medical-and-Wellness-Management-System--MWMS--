@@ -11,7 +11,7 @@ class User
 {
 public:
     // User constructor
-    User(int userNumber, const string &username,const string& password);
+    User(int userNumber, const string &username,const string& password, Role role);
      // returns the user's userID
     int getUserNumber() const;
      // prints user details

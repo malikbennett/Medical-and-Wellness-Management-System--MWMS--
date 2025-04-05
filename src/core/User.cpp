@@ -5,7 +5,8 @@
 #include <iostream>
 #include <fstream>
 
-User::User(int userNumber, const string &username,const string& password)
+User::User(int userNumber, const string &username,const string& password, Role role)
+    : jobRole(role)
 {
     setUserNumber(userNumber);
     this->username = username;
