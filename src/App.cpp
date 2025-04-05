@@ -14,18 +14,14 @@ App::App(){}
 App::~App(){}
 
 bool App::OnInit(){
-    // Get window values from settings manager
-
-    string title = Settings::getInstance().getWindowTitle();
-    int height = Settings::getInstance().getWindowHeight();
-    int width = Settings::getInstance().getWindowWidth();
+    wxInitAllImageHandlers();
 
     // Creates an instance of a "wxFrame", which is basically a window
-    MainFrame *mainFrame = new MainFrame(title);
+    MainFrame *mainFrame = new MainFrame(Settings::getInstance().windowTitle);
     // Makes window visible
     mainFrame->Show(true);
     // Sets window size
-    mainFrame->SetClientSize(width, height);
+    mainFrame->SetClientSize(Settings::getInstance().windowWidth, Settings::getInstance().windowHeight);
     // Centers window
     mainFrame->Center();
 
