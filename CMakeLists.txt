@@ -10,7 +10,7 @@ set(SOURCES
     src/core/User.cpp
     src/core/Role.cpp
     src/ui/MainFrame.cpp
-    src/ui/RenderText.cpp
+    src/utilities/RenderText.cpp
     src/utilities/Session.cpp
     src/ui/panels/HomePanel.cpp
     src/ui/panels/LoginPanel.cpp
