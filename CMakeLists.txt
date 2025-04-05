@@ -6,8 +6,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(SOURCES
     src/App.cpp
-    src/ui/MainFrame.cpp
+    src/Settings.cpp
     src/core/User.cpp
+    src/core/Role.cpp
+    src/ui/MainFrame.cpp
+    src/ui/RenderText.cpp
+    src/utilities/Session.cpp
     src/ui/panels/HomePanel.cpp
     src/ui/panels/LoginPanel.cpp
 )
