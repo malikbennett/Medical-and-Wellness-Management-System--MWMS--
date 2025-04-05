@@ -8,5 +8,14 @@ public:
     LoginPanel(wxPanel* parentPanel);
     LoginPanel(wxFrame* parentFrame);
 private:
-    void onLogin(wxCommandEvent& event);
+    wxPanel *loginPanel;
+    wxPanel *imagePanel;
+    wxBoxSizer *imageSizer;
+    wxBoxSizer *mainSizer;
+    wxBoxSizer *loginSizer;
+    wxTextCtrl *usernameField;
+    wxTextCtrl *passwordField;
+    wxChoice *roleOptions;
+    wxButton *loginBtn;
+    void onLogin(wxCommandEvent &event);
 };
