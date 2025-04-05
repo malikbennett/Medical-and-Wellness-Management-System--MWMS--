@@ -1,8 +1,9 @@
-userID, username, password, roleID
-00001,admin,;*88<$9/,01
-00002,doctor,;*88<$9/,02
-00003,psychologist,;*88<$9/,03
-00004,dietitian,;*88<$9/,04
-00005,nurse,;*88<$9/,05
-00006,receptionist,;*88<$9/,06
-00007,patient,;*88<$9/,07
+userID, username, password, roleNumber
+00001,admin,11044317160d4a00,1
+00001,admin2,11044317160d4a00,1
+00002,doctor,11044317160d4a00,2
+00003,psychologist,11044317160d4a00,3
+00004,dietitian,11044317160d4a00,4
+00005,nurse,11044317160d4a00,5
+00006,receptionist,11044317160d4a00, 6
+00007,patient,11044317160d4a00,7

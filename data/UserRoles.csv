@@ -1,8 +1,8 @@
-roleID, name, level
-01,admin,ADMIN
-02,doctor,MEDICAL_PROFESSIONAL
-03,psychologist,MEDICAL_PROFESSIONAL
-04,dietitian,MEDICAL_PROFESSIONAL
-05,nurse,SUPPORT_STAFF
-06,receptionist,SUPPORT_STAFF
-07,patient,PATIENT
+roleNumber, name, level
+1,admin,ADMIN
+2,doctor,MEDICAL_PROFESSIONAL
+3,psychologist,MEDICAL_PROFESSIONAL
+4,dietitian,MEDICAL_PROFESSIONAL
+5,nurse,SUPPORT_STAFF
+6,receptionist,SUPPORT_STAFF
+7,patient,PATIENT
