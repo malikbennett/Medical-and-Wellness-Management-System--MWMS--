@@ -40,5 +40,5 @@ void User::setUserNumber(int userNumber)
 void User::show(){
     cout << this->username << "\n"
          << this->password << "\n"
-         << this->userNumber << endl;
+         << this->getUserNumber() << endl;
 }
