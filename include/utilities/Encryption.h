@@ -16,7 +16,6 @@ public:
         static Encrypt instance;
         return instance;
     }
-
     // Read the key from a file
     void readKeyFromFile(const string &filePath, string &key)
     {
@@ -25,20 +24,22 @@ public:
             ifstream keyFile(filePath);
             if (!keyFile)
             {
-                throw runtime_error("Error: Could not open the key file.");
+                throw runtime_error("Key failed to open");
             }
             getline(keyFile, key);
         }
-        catch (const std::exception &e)
+        catch (const exception &e)
         {
-            std::cerr << e.what() << '\n';
+            cerr << e.what() << '\n';
         }
     }
     // Returns Encrypted input using XOR Encryption | Returns In HEX Format
     string xorEncryptDecrypt(const string &input, const string &key)
     {
+        if (key.empty()) {
+            throw invalid_argument("Encryption key cannot be empty.");
+        }
         string output = input;
-
         for (size_t i = 0; i < input.size(); ++i)
         {
             output[i] ^= key[i % key.size()]; // Loop through the key
