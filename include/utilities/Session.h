@@ -2,6 +2,7 @@
 #include "User.h"
 #include "Role.h"
 #include <vector>
+#include <Status.h>
 
 class Session {
 public:
@@ -10,7 +11,7 @@ public:
     // Logs in the respective user in session
     static void SetCurrentUser(int userId, const string& username, const string& password, Role role);
     static void Logout();
-    static string Login(const string &username, const string &password, const string &role);
+    static Result Login(const string &username, const string &password, const string &role);
     static Role loadRole(const string& filePath, int roleNumber);
 
 private:

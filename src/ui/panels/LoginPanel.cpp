@@ -75,19 +75,20 @@ LoginPanel::LoginPanel(wxFrame *parentFrame) : wxPanel(parentFrame) {}
 
 void LoginPanel::onLogin(wxCommandEvent &event)
 {
-    wxString username = this->usernameField->GetValue();
-    wxString password = this->passwordField->GetValue();
-    wxString role = this->roleOptions->GetStringSelection();
+    // Gets results from input fields and roleOption
 
-    // convert to string
-    string usernameStr = username.ToStdString();
-    string passwordStr = password.ToStdString();
-    string roleStr = role.ToStdString();
+    string usernameStr = usernameField->GetValue().ToStdString();
+    string passwordStr = passwordField->GetValue().ToStdString();
+    string roleStr = roleOptions->GetStringSelection().ToStdString();
 
-    wxLogMessage("Username: %s", username);
-    wxLogMessage("Password: %s", password);
-    wxLogMessage("Role: %s", role);
+    // Logs user into the session
 
-    // Login
-    Session::Login(usernameStr, passwordStr, roleStr);
+    Result status = Session::Login(usernameStr, passwordStr, roleStr);
+    if(status.ok()){
+        Session::GetCurrentUser()->show();
+    }
+    else
+    {
+        wxMessageBox(status.message(), status.type(), wxICON_ERROR);
+    }
 }
