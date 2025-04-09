@@ -82,13 +82,8 @@ void LoginPanel::onLogin(wxCommandEvent &event)
     string roleStr = roleOptions->GetStringSelection().ToStdString();
 
     // Logs user into the session
-
-    Result status = Session::Login(usernameStr, passwordStr, roleStr);
-    if(status.ok()){
-        Session::GetCurrentUser()->show();
-    }
-    else
+    if(Session::AuthenticateUser(usernameStr, passwordStr, roleStr) <= 0)
     {
-        wxMessageBox(status.message(), status.type(), wxICON_ERROR);
+        Session::GetCurrentUser()->show();
     }
 }
