@@ -14,7 +14,7 @@ struct Role{
     string roleLevel;
     // maps role names to role numbers
     static map<string, int> roleMap;
-    // Constructor
+    // Constructors
     Role() = default;
     Role(const Role&) = default;
     Role(int rNumber, const string &rName, const string &rLevel);

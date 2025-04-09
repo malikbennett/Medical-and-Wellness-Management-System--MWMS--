@@ -5,6 +5,7 @@
 // Class that displays the login panel/screen
 class LoginPanel : public wxPanel{
 public:
+    // Constructors
     LoginPanel(wxPanel* parentPanel);
     LoginPanel(wxFrame* parentFrame);
 private:
