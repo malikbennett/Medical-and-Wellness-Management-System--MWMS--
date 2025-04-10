@@ -5,5 +5,5 @@
 // Class that displays the home panel/screen
 class HomePanel : public wxPanel {
 public:
-    HomePanel(wxWindow* parent);
+    HomePanel(wxPanel* parentPanel);
 };

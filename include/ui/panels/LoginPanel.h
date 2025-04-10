@@ -6,9 +6,10 @@
 class LoginPanel : public wxPanel{
 public:
     // Constructors
-    LoginPanel(wxPanel* parentPanel);
+    LoginPanel(wxPanel* parentPanel, wxPanel* nextPanel);
 private:
     wxPanel *loginPanel;
+    wxPanel *nextPanel;
     wxBoxSizer *imageSizer;
     wxBoxSizer *mainSizer;
     wxBoxSizer *loginSizer;
@@ -17,4 +18,5 @@ private:
     wxChoice *roleOptions;
     wxButton *loginBtn;
     void onLogin(wxCommandEvent &event);
+    void hide();
 };
