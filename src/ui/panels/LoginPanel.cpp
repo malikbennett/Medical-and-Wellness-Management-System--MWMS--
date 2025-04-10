@@ -1,6 +1,8 @@
+#include <RenderText.h>
 #include <LoginPanel.h>
-#include <Session.h>
+#include <MainFrame.h>
 #include <Settings.h>
+#include <Session.h>
 #include <Role.h>
 #include <RenderText.h>
 
@@ -37,17 +39,7 @@ LoginPanel::LoginPanel(wxPanel *parentPanel) : wxPanel(parentPanel)
     this->passwordField->SetHint("Enter password");
     this->passwordField->SetToolTip("Enter password");
 
-    // List of Roles
-    wxArrayString roles;
-    for(const auto &pair : Role::roleMap){
-        roles.Add(pair.first);
-    }
-    this->roleOptions = new wxChoice(this->loginPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, roles);
-    this->roleOptions->SetBackgroundColour(Settings::getInstance().colors.textSecondaryLight);
-    this->roleOptions->SetForegroundColour(Settings::getInstance().colors.textPrimary);
-    this->roleOptions->Select(4);
-
-    this->loginBtn = new wxButton(this->loginPanel, wxID_OK, "Login");
+    this->loginBtn = new wxButton(this, wxID_OK, "Login");
     this->loginBtn->SetBackgroundColour(Settings::getInstance().colors.primary);
     this->loginBtn->Bind(wxEVT_BUTTON, &LoginPanel::onLogin, this);
 
@@ -56,10 +48,9 @@ LoginPanel::LoginPanel(wxPanel *parentPanel) : wxPanel(parentPanel)
     // Add elements to sizer
     this->loginSizer->Add(firstHeader, 0, wxEXPAND | wxALL, margin);
     this->loginSizer->Add(subText, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    this->loginSizer->Add(this->usernameField, 2, wxEXPAND | wxALIGN_CENTER | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    this->loginSizer->Add(this->passwordField, 2, wxEXPAND | wxALIGN_CENTER | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    this->loginSizer->Add(this->roleOptions, 2, wxALIGN_CENTER | wxBOTTOM, margin);
-    this->loginSizer->Add(this->loginBtn, 3, wxEXPAND | wxALL, margin);
+    this->loginSizer->Add(this->usernameField, 1, wxEXPAND | wxALIGN_CENTER | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    this->loginSizer->Add(this->passwordField, 1, wxEXPAND | wxALIGN_CENTER | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    this->loginSizer->Add(this->loginBtn, 1, wxEXPAND | wxALL, margin);
 
     // Main sizer to center loginPanel on screen
     this->mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -82,7 +73,7 @@ void LoginPanel::onLogin(wxCommandEvent &event)
     string roleStr = roleOptions->GetStringSelection().ToStdString();
 
     // Logs user into the session
-    if(Session::AuthenticateUser(usernameStr, passwordStr, roleStr) <= 0)
+    if(Session::Login(usernameStr, passwordStr) <= 0)
     {
         Session::GetCurrentUser()->show();
     }

@@ -7,10 +7,8 @@ class LoginPanel : public wxPanel{
 public:
     // Constructors
     LoginPanel(wxPanel* parentPanel);
-    LoginPanel(wxFrame* parentFrame);
 private:
     wxPanel *loginPanel;
-    wxPanel *imagePanel;
     wxBoxSizer *imageSizer;
     wxBoxSizer *mainSizer;
     wxBoxSizer *loginSizer;
