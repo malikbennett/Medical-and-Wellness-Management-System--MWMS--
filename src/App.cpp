@@ -3,6 +3,7 @@
 #include <App.h>
 #include <MainFrame.h>
 #include <Settings.h>
+#include <Session.h>
 #include <User.h>
 #include <Encryption.h>
 #include <iostream>
@@ -10,10 +11,11 @@
 // This function starts the main function (Needed for program to run)
 wxIMPLEMENT_APP(App);
 
-App::App(){}
-App::~App(){}
+App::App() {}
+App::~App() {}
 
-bool App::OnInit(){
+bool App::OnInit()
+{
     wxInitAllImageHandlers();
 
     // Creates an instance of a "wxFrame", which is basically a window
@@ -26,4 +28,10 @@ bool App::OnInit(){
     mainFrame->Center();
 
     return true;
+}
+
+int App::OnExit()
+{
+    Session::Logout();
+    return 0;
 }

@@ -6,6 +6,14 @@
 
 using namespace std;
 
+constexpr int USER_NUMBER = 5;
+constexpr int USERNAME_WIDTH = 16;
+constexpr int PASSWORD_WIDTH = 64;
+constexpr int ROLE_NUMBER = 2;
+constexpr int ATTEMPTS_REMAINDING = 1;
+constexpr int ACCOUNT_LOCKED = 1;
+
+
 // Base User Class
 class User
 {

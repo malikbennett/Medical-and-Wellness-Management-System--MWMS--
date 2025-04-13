@@ -10,5 +10,6 @@ public:
     App();
     ~App();
     // Initial app setup, this is called to set window attributes and other main logic
-    virtual bool OnInit();
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 };

@@ -12,10 +12,12 @@ struct Role{
     string roleName;
     // level of the roles permission
     string roleLevel;
-    // maps role names to role numbers
-    static map<string, int> roleMap;
+    // File path to the role information database
+    static string userRolePath;
     // Constructors
     Role() = default;
     Role(const Role&) = default;
     Role(int rNumber, const string &rName, const string &rLevel);
+    // Gets the role data from the role database
+    static Role LoadRoleFromFile(const string &filePath, int roleNumber);
 };

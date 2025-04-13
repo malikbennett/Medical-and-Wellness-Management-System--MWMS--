@@ -1,90 +1,77 @@
 #include <UserManager.h>
-#include <Encryption.h>
+#include <User.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <wx/wx.h>
-#include <vector>
 
-string UserManager::userInfoPath = "../../data/UserInfo.csv";
-string UserManager::userRolePath = "../../data/UserRoles.csv";
+UserData *UserManager::data = nullptr;
+string UserManager::userInfoPath = "../../data/UserInfo.txt";
 
-bool UserManager::AuthenticateUser(int &userNumber,const string &username,string &password,Role &role)
+string padString(const string &value, int width){
+    string padded = value;
+    padded.resize(width, ' ');
+    return padded;
+}
+
+void *UserManager::FindUserByUsername(const string &username)
 {
     try
     {
-        // Validate Credential before authenticating
-        if (!ValidateCredentials(username, password))
+        // If no userData is loaded or loaded userData is not the one requested, reload
+        if (!data || data->username != username)
         {
-            return 1;
-        }
-        // Opens User Info file
-        ifstream file(userInfoPath);
-        if (!file.is_open())
-        {
-            // Returns an error is file did not open successfully
-            throw runtime_error("Failed to open User Info Data");
-        }
-        // Variable to store record
-        string line;
-        // Skips the first line
-        getline(file, line);
-        // Encryption Key
-        string key;
-        Encrypt::getInstance().readKeyFromFile("../../data/encryption.key", key);
-        // Loops through each line; starting from the second record
-        while (getline(file, line))
-        {
-            // Initialize a stringstream to parse record into individual fields
-            stringstream ss(line);
-            // Variable to store each field's value
-            string token;
-            // Vector which stores each token for later access
-            vector<string> fields;
-            // Loops through the stringstream and store each value seperated by a "," into token variable
-            while (getline(ss, token, ','))
+            // save old data if loaded userData is not the one requested
+            if (data)
             {
-                // Adds value into field variable
-                fields.push_back(token);
+                saveUserData(*data);
+                delete data;
+                data = nullptr;
             }
-            // If the field size(amount of columns) does not match 4; that means there is an error with that record and it should be skipped
-            if (fields.size() != 6)
-                continue;
-            // Variable for username from our database
-            string fileUsername = fields[1];
-            // Variable for password from our database
-            string filePassword = fields[2];
-            // Variable for roleNumber from our database
-            int fileRoleId = stoi(fields[3]);
-            // Skips through each record and check if the username matches with any in our databased
-            if (fileUsername != username)
-                continue;
-            // Encrypts the password the user gave us to we can check it against the one we have in our database
-            password = Encrypt::getInstance().xorEncryptDecrypt(password, key);
-            // If the username matches we now check if the password matches as well
-            if (password != filePassword)
+            // Opens User Info file
+            ifstream file(userInfoPath);
+            if (!file.is_open())
             {
-                // If password does not match an Error is given
-                throw runtime_error("Password is incorrect.");
+                // Returns an error is file did not open successfully
+                throw runtime_error("User File Information Could not open");
             }
-            // Creates role Object
-            role = LoadRoleFromFile(userRolePath, fileRoleId);
-            // Sets user number
-            userNumber = stoi(fields[0]);
-            return 0;
+            // Variable to store record
+            string line;
+            // Loops through each line
+            while (getline(file, line))
+            {
+                // Initialize a stringstream to parse record into individual fields
+                istringstream ss(line);
+                // Initialize Different variables to store fields
+                string fileUserNumber, fileUsername, filePassword, fileRoleIdStr, attemptsStr, lockedStr;
+                // Store each field in its respected variable
+                getline(ss, fileUserNumber, ',');
+                getline(ss, fileUsername, ',');
+                getline(ss, filePassword, ',');
+                getline(ss, fileRoleIdStr, ',');
+                getline(ss, attemptsStr, ',');
+                getline(ss, lockedStr, ',');
+                // Skips through each record and check if the username matches with any in our databased
+                if (fileUsername != username)
+                    continue;
+                // Initialize UserData object
+                data = new UserData(stoi(fileUserNumber), fileUsername, filePassword, stoi(fileRoleIdStr), (lockedStr == "1"), stoi(attemptsStr));
+                break;
+            }
+            // An Error is given if after skipping through each record username does not match any
+            if (!data)
+            {
+                throw runtime_error("Invalid Credentials.");
+            }
+            //closes file
+            file.close();
         }
-        // An Error is given if after skipping through each record username does not match any
-        throw runtime_error("Username not found.");
     }
-    catch (const exception &e)
+    catch (const std::exception &e)
     {
         cerr << "Login error: " << e.what() << endl;
         wxMessageBox(e.what(), "Login Error", wxICON_ERROR);
-        return 1;
-        ;
     }
-    wxMessageBox("Unknown Error", "Unknown", wxICON_ERROR);
-    return 1;
 }
 
 bool UserManager::ValidateCredentials(const string &username, const string &password)
@@ -107,59 +94,78 @@ bool UserManager::ValidateCredentials(const string &username, const string &pass
     return false;
 }
 
-Role UserManager::LoadRoleFromFile(const string &filePath, int roleNumber)
+void UserManager::decrementAttempts(UserData &userData)
+{
+    if (userData.attemptsRemainding == 1)
+    {
+        lockAccount(userData);
+    }
+    else
+    {
+        userData.attemptsRemainding--;
+    }
+};
+
+void UserManager::resetAttempts(UserData &userData)
+{
+    userData.attemptsRemainding = 3;
+};
+
+void UserManager::lockAccount(UserData &userData)
+{
+    userData.isLocked = 1;
+};
+
+void UserManager::unlockAccount(UserData &userData) {};
+
+void UserManager::saveUserData(const UserData &userData)
 {
     try
     {
-        // Open role data file
-        ifstream file(filePath);
-        // Checks if the file failed to open
-        if (file.fail())
+        // width of each field
+        const int fieldWidths[6] = {USER_NUMBER, USERNAME_WIDTH, PASSWORD_WIDTH, ROLE_NUMBER, ATTEMPTS_REMAINDING, ACCOUNT_LOCKED};
+        // total line size + 5 for commas
+        const int totalWidth = USER_NUMBER + USERNAME_WIDTH + PASSWORD_WIDTH + ROLE_NUMBER + ATTEMPTS_REMAINDING + ACCOUNT_LOCKED + 5;
+        // Open User info File
+        fstream file(userInfoPath, ios::in | ios::out);
+        if (!file.is_open())
         {
-            // If file failed an error is thrown
-            wxMessageBox("Role data file failed to open", "File Error", wxICON_ERROR);
-            throw runtime_error("Role data file failed to open");
+            // Returns an error is file did not open successfully
+            throw runtime_error("User File Information Could not open");
         }
         // Variable to store record
         string line;
-        // Skips to first line
-        getline(file, line);
-        // Loops through each store
-        while (getline(file, line))
-        {
-            // Initialize a stringstream to parse record into individual fields
-            stringstream ss(line);
-            // Variable to store each field's value
-            string token;
-            // Vector which stores each token for later access
-            vector<string> fields;
-            // Loops through the stringstream and store each value seperated by a "," into token variable
-            while (getline(ss, token, ','))
-            {
-                // Adds value into field variable
-                fields.push_back(token);
+        int lineNum = 0;
+        // Find User we need to save in file
+        while(getline(file,line)){
+            // Compare the first n amount (i.e USER_NUMBER) of char
+            if(stoi(line.substr(0,fieldWidths[0])) == userData.userNumber){
+                break;
             }
-            // If the field size(amount of columns) does not match 3; that means there is an error with that record and it should be skipped
-            if (fields.size() != 3)
-                continue;
-            // convert roleNumber from database into an int and stores it
-            int roleID = stoi(fields[0]);
-            // Checks if roleNumbers match
-            if (roleID == roleNumber)
-            {
-                // Closes file
-                file.close();
-                // Returns an instance of type Role
-                return Role(roleID, fields[1], fields[2]);
-            }
+            ++lineNum;
         }
-        // Closes file
+        stringstream ss;
+        ss << padString(to_string(userData.userNumber), USER_NUMBER)
+        << ',' << userData.username
+        << ',' << userData.encryptedPassword
+        << ',' << padString(to_string(userData.roleId), ROLE_NUMBER)
+        << ',' << padString(to_string(userData.attemptsRemainding), ATTEMPTS_REMAINDING)
+        << ',' << padString((userData.isLocked) ? "1" : "0", ACCOUNT_LOCKED)
+        ;
+        // Calculate byte offset
+        int offset = lineNum * (totalWidth + 1); // +1 for newline
+        // Seek to position and overwrite
+        file.seekp(offset, ios::beg);
+        file << ss.str();
         file.close();
     }
-    catch (const exception &e)
+    catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
     }
-    // Returns empty Role if role was not created successfully
-    return Role();
 }
+
+UserData *UserManager::getData()
+{
+    return data;
+};
