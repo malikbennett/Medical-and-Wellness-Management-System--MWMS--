@@ -13,6 +13,12 @@ constexpr int ROLE_NUMBER = 2;
 constexpr int ATTEMPTS_REMAINDING = 1;
 constexpr int ACCOUNT_LOCKED = 1;
 
+// Date structure
+struct Date{
+    string day;
+    string month;
+    string year;
+};
 
 // Base User Class
 class User
