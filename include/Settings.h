@@ -2,11 +2,6 @@
 #include <wx/wx.h>
 using namespace std;
 
-enum Theme {
-    Light,
-    Dark
-};
-
 struct ColorPalette {
     wxColor background;
     wxColor surface;
@@ -42,6 +37,11 @@ public:
     static Settings instance;
     return instance;
   };
+  bool isDarkMode() {
+    wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    // Simple check: if background is dark, assume dark mode
+    return (bg.Red() + bg.Green() + bg.Blue()) / 3 < 128;
+}
 
   // Constant Settings Data ; these cannot be changed elsewhere
   const string windowTitle = "MWMS";
@@ -52,18 +52,16 @@ public:
 private:
   // Private constructer; no instances can be made
   Settings() {
-    this->colors = GetColorPalette(Settings::theme);
+    this->colors = GetColorPalette();
   }
   // This prevents copying
   Settings(const Settings &) = delete;
   void operator=(const Settings &) = delete;
 
-  static Theme theme;
-
-  ColorPalette GetColorPalette(Theme theme = Light) {
+  ColorPalette GetColorPalette() {
     ColorPalette palette;
 
-    if (theme == Light) {
+    if (!isDarkMode()) {
         palette.background = wxColor(235, 235, 235);
         palette.surface = wxColor(245, 245, 245);
         palette.surfaceLight = wxColor(255, 255, 255);

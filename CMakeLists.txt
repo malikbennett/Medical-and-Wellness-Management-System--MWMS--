@@ -13,7 +13,7 @@ set(SOURCES
     src/utilities/RenderText.cpp
     src/utilities/Session.cpp
     src/utilities/UserManager.cpp
-    src/ui/panels/HomePanel.cpp
+    src/ui/panels/DashboardPanel.cpp
     src/ui/panels/LoginPanel.cpp
 )
 

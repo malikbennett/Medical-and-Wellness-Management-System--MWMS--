@@ -13,9 +13,17 @@ User::User(int userNumber, const string &username,const string& password, Role r
     this->password = password;
 }
 
-int User::getUserNumber() const
+const int User::getUserNumber() const
 {
-    return userNumber;
+    return this->userNumber;
+}
+const string User::getUserName() const
+{
+    return this->username;
+}
+const Role& User::getRole() const
+{
+    return this->jobRole;
 }
 
 void User::setUserNumber(int userNumber)
@@ -37,7 +45,7 @@ void User::setUserNumber(int userNumber)
     }
 }
 
-void User::show(){
+void User::show() const{
     cout << this->username << "\n"
          << this->password << "\n"
          << this->getUserNumber() << endl;

@@ -6,7 +6,7 @@
 
 User *Session::currentUser = nullptr;
 
-User *Session::GetCurrentUser()
+const User *Session::GetCurrentUser()
 {
     // Returns currentUser
     return currentUser;
@@ -77,5 +77,6 @@ void Session::Logout()
         // Delete the current user instance from memory
         delete currentUser;
         currentUser = nullptr;
+        cout << "Successfully Log out" << endl;
     }
 }

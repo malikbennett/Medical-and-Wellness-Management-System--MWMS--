@@ -26,10 +26,15 @@ class User
 public:
     // User constructor
     User(int userNumber, const string &username,const string& password, Role role);
-     // returns the user's userID
-    int getUserNumber() const;
-     // prints user details
-    void show();
+    // prints user details
+    void show() const;
+    // Getters and Setters
+    // returns the user's userID
+    const int getUserNumber() const;
+    // returns the user's userID
+    const string getUserName() const;
+    // returns the user's userID
+    const Role& getRole() const;
 
 private:
     // unique userId

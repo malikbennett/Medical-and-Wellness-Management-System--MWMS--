@@ -6,10 +6,12 @@
 class LoginPanel : public wxPanel{
 public:
     // Constructors
-    LoginPanel(wxPanel* parentPanel, wxPanel* nextPanel);
+    LoginPanel(wxPanel* parent);
+    void buildUI();
+
 private:
+    wxPanel *parent;
     wxPanel *loginPanel;
-    wxPanel *nextPanel;
     wxBoxSizer *imageSizer;
     wxBoxSizer *mainSizer;
     wxBoxSizer *loginSizer;

@@ -6,7 +6,7 @@ class Session
 {
 public:
     // Return the current active user in session
-    static User* GetCurrentUser();
+    static  const User* GetCurrentUser();
     // Logs in the respective user in session
     static unsigned int Login(string& username, string& password);
     // Logs user out of the current session
