@@ -1,7 +1,6 @@
 
 #include "core/Prescription.h"
-#include <fstream>     
-#include <sstream>     
+#include <fstream>        
 #include <iostream>    
 
 void Prescription::approve() {
