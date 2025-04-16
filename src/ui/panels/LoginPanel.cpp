@@ -1,5 +1,4 @@
-#include <DashboardPanel.h>
-#include <RenderText.h>
+#include <HomePanel.h>
 #include <LoginPanel.h>
 #include <MainFrame.h>
 #include <Settings.h>

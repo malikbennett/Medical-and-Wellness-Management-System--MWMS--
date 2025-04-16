@@ -17,6 +17,7 @@ private:
     wxBoxSizer* mainSizer;
     wxPanel *currentView;
     wxPanel *footerPanel;
+    wxPanel *menuPanel;
     wxBoxSizer *sizerCurrent;
     wxBoxSizer *sizerCenter;
 };

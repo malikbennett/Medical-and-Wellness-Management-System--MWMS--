@@ -1,7 +1,7 @@
 // This is the main file for UI components; initialize panels (Different Screens (eg. Login, Home Page, etc..)), and different elements.
 
 #include <MainFrame.h>
-#include <DashboardPanel.h>
+#include <HomePanel.h>
 #include <User.h>
 #include <Role.h>
 #include <iostream>
@@ -10,6 +10,7 @@
 MainFrame::MainFrame(const wxString &title) : wxFrame(nullptr, wxID_ANY, title)
 {
     this->footerPanel = nullptr;
+    this->menuPanel = nullptr;
     // Main Panel for the window/frame
     this->mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(200, 100));
 
@@ -48,6 +49,14 @@ void MainFrame::SwitchPanel(wxPanel *panel)
         this->footerPanel->Destroy();
         this->footerPanel = nullptr;
     }
+    // Remove and destroy menu if it exists
+    if (this->menuPanel)
+    {
+        this->sizerCurrent->Detach(this->menuPanel);
+        this->menuPanel->Hide();
+        this->menuPanel->Destroy();
+        this->menuPanel = nullptr;
+    }
     // Swap in new view
     if (LoginPanel *loginPanel = dynamic_cast<LoginPanel *>(panel))
     {
@@ -59,6 +68,8 @@ void MainFrame::SwitchPanel(wxPanel *panel)
     {
         this->currentView = panel;
         this->footerPanel = new Footer(this->mainPanel);
+        this->menuPanel = new Menu(this->mainPanel);
+        this->sizerCurrent->Add(this->menuPanel, 0, wxEXPAND | wxALL);
         this->sizerCurrent->Add(this->currentView, 1, wxEXPAND | wxALL);
         this->sizerCurrent->Add(this->footerPanel, 0, wxEXPAND | wxALL);
     }

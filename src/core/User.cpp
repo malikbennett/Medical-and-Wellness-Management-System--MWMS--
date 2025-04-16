@@ -1,5 +1,5 @@
 // User class implementation
-
+#include <UserManager.h>
 #include <User.h>
 #include <stdexcept>
 #include <iostream>
@@ -11,6 +11,13 @@ User::User(int userNumber, const string &username,const string& password, Role r
     setUserNumber(userNumber);
     this->username = username;
     this->password = password;
+}
+User::User(UserDataBuffer *data)
+{
+    setUserNumber(data->userNumber);
+    this->username = trimString(data->username);
+    this->password = trimString(data->encryptedPassword);
+    this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, data->roleId);
 }
 
 const int User::getUserNumber() const

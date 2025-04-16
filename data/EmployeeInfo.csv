@@ -1,0 +1,13 @@
+userNumber,employeeID, firstName, middleName, lastName, DOB, dateofemployment(DOE),assignedDepartment,gender,trn,jobTitle,assignedSupervisor
+3001,001,Karen,Marie,Thompson,1975-06-12,2010-08-01,Administration,F,123456789,adminstrator,N/A
+3002,002,Richard,Dean,Grant,1980-03-22,2015-01-15,Administration,M,234567891,adminstrator,N/A
+3003,003,Lisa,Nicole,Reid,1985-11-09,2018-05-10,Psychiatry,F,345678912,psychologist,Karen Thompson
+3004,004,George,Anthony,Burke,1979-08-18,2013-04-03,Nutrition,M,456789123,dietitian,Karen Thompson
+3005,005,Ashley,Diane,Green,1990-09-07,2020-02-25,General Nursing,F,567891234,nurse,Richard Grant
+3006,006,Sean,Alexander,James,1992-01-30,2019-11-17,Reception,M,678912345,receptionist,Karen Thompson
+3007,007,Monique,Sasha,Brown,1988-05-12,2016-06-22,Pediatrics,F,789123456,doctor,Richard Grant
+3008,008,David,Jerome,Matthews,1991-07-24,2021-03-08,General Nursing,M,891234567,nurse,Karen Thompson
+3009,009,Janet,Lee,Francis,1984-02-16,2014-09-30,Nutrition,F,912345678,dietitian,Richard Grant
+3010,010,Clive,Marcus,Stewart,1977-12-04,2009-12-01,Psychiatry,M,135792468,psychologist,Richard Grant
+3011,011,Nicole,Althea,Harris,1993-03-11,2022-01-14,Reception,F,246813579,receptionist,Karen Thompson
+3012,012,Tamara,Louise,Bailey,1986-10-29,2017-07-07,General Medicine,F,357924681,doctor,Richard Grantn
