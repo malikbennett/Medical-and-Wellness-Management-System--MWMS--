@@ -4,7 +4,6 @@
 #include <sstream>     
 #include <iostream>    
 
-
 void Prescription::approve() {
     isApproved = true;
 }
