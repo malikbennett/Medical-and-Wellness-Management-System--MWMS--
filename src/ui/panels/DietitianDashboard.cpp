@@ -1,5 +1,6 @@
 #include <Dashboard.h>
 #include <Settings.h>
+#include <Helper.h>
 
 /* ---------------- Dietitian Dashboard ---------------- */
 DietitianDashboard::DietitianDashboard(wxPanel *parent) : Dashboard(parent) { buildUI(); }

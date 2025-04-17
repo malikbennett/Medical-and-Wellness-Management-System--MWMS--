@@ -1,25 +1,26 @@
 #include <Patient.h>
 #include <UserManager.h>
 #include <iostream>
+#include <string>
 
-Patient::Patient(UserDataBuffer *data, PatientProfile *userProfile)
+Patient::Patient(UserDataBuffer *data)
     : User(data)
 {
-    this->patientNumber = stoi(userProfile->records[0]);
-    this->patientfirstName = userProfile->records[1];
-    this->patientmiddleName = userProfile->records[2];
-    this->patientlastName = userProfile->records[3];
-    this->trn = stoi(userProfile->records[4]);
-    this->patientDOB = Date::toDate(userProfile->records[5]);
-    this->firstVisit = Date::toDate(userProfile->records[6]);
-    this->patientGender = userProfile->records[7];
-    this->martialStatus = userProfile->records[8];
-    this->nextOfKin = userProfile->records[9];
-    this->nextOfKinContact = Phone::toPhone(userProfile->records[10]);
-    this->medicalHistory = userProfile->records[11];
-    this->emailAddress = userProfile->records[12];
-    this->phoneNumber = Phone::toPhone(userProfile->records[13]);
-    this->patientAddress = Address::toAddress(userProfile->records[14]);
+    this->patientNumber = stoi(data->ProfileRecords[1]);
+    this->patientfirstName = data->ProfileRecords[2];
+    this->patientmiddleName = data->ProfileRecords[3];
+    this->patientlastName = data->ProfileRecords[4];
+    this->trn = stoi(data->ProfileRecords[5]);
+    this->patientDOB = Date::toDate(data->ProfileRecords[6]);
+    this->firstVisit = Date::toDate(data->ProfileRecords[7]);
+    this->patientGender = data->ProfileRecords[8];
+    this->martialStatus = data->ProfileRecords[9];
+    this->nextOfKin = data->ProfileRecords[10];
+    this->nextOfKinContact = Phone::toPhone(data->ProfileRecords[11]);
+    this->medicalHistory = data->ProfileRecords[12];
+    this->emailAddress = data->ProfileRecords[13];
+    this->phoneNumber = Phone::toPhone(data->ProfileRecords[14]);
+    this->patientAddress = Address::toAddress(data->ProfileRecords[15]);
 };
 
 int Patient::getPatientNumber() const { return this->patientNumber; }

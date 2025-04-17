@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <string>
 
 User::User(int userNumber, const string &username,const string& password, Role role)
     : jobRole(role)

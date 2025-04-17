@@ -23,7 +23,7 @@ public:
 
     void loadEmployeeFields()
     {
-        auto allUsers = UserManager::getAllUsers();
+        vector<UserDataBuffer *> allUsers = UserManager::getAllUsers();
         this->users.clear();
 
         // Only keep users who are NOT patients (i.e., roleId != 7)
@@ -83,19 +83,6 @@ public:
     virtual wxString OnGetItemText(long index, long column) const override
     {
         UserDataBuffer *user = this->users.at(index);
-        IUserProfile *profile = UserManager::getProfileInfo(user->roleId, user->userNumber);
-        EmployeeProfile *ep = nullptr;
-        PatientProfile *pp = nullptr;
-
-        if (user->roleId != 7)
-        {
-            ep = dynamic_cast<EmployeeProfile *>(profile);
-        }
-        else
-        {
-            pp = dynamic_cast<PatientProfile *>(profile);
-        }
-
         switch (column)
         {
         case 0:
@@ -111,70 +98,70 @@ public:
         case 5:
             return (user->isLocked) ? "yes" : "no";
         }
-
-        // Only access EmployeeProfile fields if ep is valid
-        if (ep != nullptr)
+        // Only access Employee Profile fields
+        if (user->roleId != 7)
         {
             switch (column)
             {
             case 6:
-                return ep->records[1];
+                return user->ProfileRecords[1];
             case 7:
-                return ep->records[2];
+                return user->ProfileRecords[2];
             case 8:
-                return ep->records[3];
+                return user->ProfileRecords[3];
             case 9:
-                return ep->records[4];
+                return user->ProfileRecords[4];
             case 10:
-                return ep->records[5];
+                return user->ProfileRecords[5];
             case 11:
-                return ep->records[6];
+                return user->ProfileRecords[6];
             case 12:
-                return ep->records[7];
+                return user->ProfileRecords[7];
             case 13:
-                return ep->records[8];
+                return user->ProfileRecords[8];
             case 14:
-                return ep->records[9];
+                return user->ProfileRecords[9];
             case 15:
-                return ep->records[10];
+                return user->ProfileRecords[10];
             case 16:
-                return ep->records[11];
+                return user->ProfileRecords[11];
             }
         }
-        if (pp != nullptr)
+        // Only access Patient Profile fields
+        if (user->roleId == 7)
         {
             switch (column)
             {
             case 6:
-                return pp->records[1];
+                return user->ProfileRecords[1];
             case 7:
-                return pp->records[2];
+                return user->ProfileRecords[2];
             case 8:
-                return pp->records[3];
+                return user->ProfileRecords[3];
             case 9:
-                return pp->records[4];
+                return user->ProfileRecords[4];
             case 10:
-                return pp->records[5];
+                return user->ProfileRecords[5];
             case 11:
-                return pp->records[6];
+                return user->ProfileRecords[6];
             case 12:
-                return pp->records[7];
+                return user->ProfileRecords[7];
             case 13:
-                return pp->records[8];
+                return user->ProfileRecords[8];
             case 14:
-                return pp->records[9];
+                return user->ProfileRecords[9];
             case 15:
-                return pp->records[10];
+                return user->ProfileRecords[10];
             case 16:
-                return pp->records[11];
+                return user->ProfileRecords[11];
             case 17:
-                return pp->records[12];
+                return user->ProfileRecords[12];
             case 18:
-                return pp->records[13];
+                return user->ProfileRecords[13];
             case 19:
-                return pp->records[14];
+                return user->ProfileRecords[14];
             case 20:
-                return pp->records[15];
+                return user->ProfileRecords[15];
             }
         }
         return " ";

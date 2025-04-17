@@ -1,19 +1,13 @@
 #pragma once
 
 #include <User.h>
-
-constexpr int EMPLOYEE_ID = 5;
-constexpr int EMPLOYEE_NAME = 16;
-constexpr int EMPLOYEE_GENDER = 64;
-constexpr int EMPLOYEE_DOB = 10;
-constexpr int EMPLOYEE_ADDRESS = 1;
-
-struct EmployeeProfile;
+#include <string>
+#include <Helper.h>
 
 class Employee : public User
 {
 public:
-    Employee(UserDataBuffer *data, EmployeeProfile *userProfile);
+    Employee(UserDataBuffer *data);
     // Getters
     int getId() const;
     string getFirstName() const;

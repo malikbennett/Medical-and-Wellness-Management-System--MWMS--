@@ -1,6 +1,7 @@
 
 #include <Dashboard.h>
 #include <Settings.h>
+#include <Helper.h>
 
 /* ---------------- Nurse Dashboard ---------------- */
 NurseDashboard::NurseDashboard(wxPanel *parent) : Dashboard(parent) { buildUI(); }

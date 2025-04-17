@@ -1,4 +1,5 @@
 #include <Dashboard.h>
+#include <Helper.h>
 #include <Settings.h>
 #include <UserManager.h>
 #include <ListViewCtrl.h>

@@ -3,6 +3,7 @@
 #include <MainFrame.h>
 #include <Settings.h>
 #include <Session.h>
+#include <Helper.h>
 #include <Role.h>
 
 LoginPanel::LoginPanel(wxPanel *parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(325, 350))

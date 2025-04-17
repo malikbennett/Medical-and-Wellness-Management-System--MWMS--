@@ -1,4 +1,5 @@
 #include <Dashboard.h>
+#include <Helper.h>
 #include <Session.h>
 #include <Employee.h>
 #include <Patient.h>
@@ -17,10 +18,6 @@ wxPanel* Dashboard::createHomeTab()
 
     wxPanel* panel = new wxPanel(notebook);
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-
-    if(emp){
-        AddText(panel, sizer, emp->getJobTitle(), this->headingFont, 5);
-    }
 
     AddText(panel,sizer,"Overview:",this->headingFont), 5;
     AddText(panel,sizer,"Nothing to see here",this->paraFont, 5);

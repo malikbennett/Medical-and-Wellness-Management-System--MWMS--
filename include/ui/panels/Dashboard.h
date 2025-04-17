@@ -2,7 +2,6 @@
 
 #include <wx/wx.h>
 #include <wx/notebook.h>
-#include <GuiHealper.h>
 
 /* ---------------- Base Dashboard ---------------- */
 class Dashboard : public wxPanel

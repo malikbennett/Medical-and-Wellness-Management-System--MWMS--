@@ -1,34 +1,15 @@
 #pragma once
 
 #include <string>
-#include <Patient.h>
 #include <vector>
 
 using namespace std;
-// User Profile Base Class
-struct IUserProfile
-{
-    virtual ~IUserProfile() {}
-};
-// Employee Temp
-struct EmployeeProfile : public IUserProfile
-{
-    vector<string> records;
-    EmployeeProfile(vector<string> records){
-        this->records = records;
-    }
-};
-// Patient Temp
-struct PatientProfile : public IUserProfile
-{
-    vector<string> records;
-    PatientProfile(vector<string> records){
-        this->records = records;
-    };
-};
+
 // DataType to store UserData/Record; avoids search for same user over and over
 struct UserDataBuffer
 {
+    vector<string> UserData;
+    vector<string> ProfileRecords;
     int userNumber;
     string username;
     string encryptedPassword;
@@ -36,9 +17,8 @@ struct UserDataBuffer
     bool isLocked;
     int attemptsRemainding;
     // Constructor
-    UserDataBuffer(int userNumber, string username, string encryptedPassword, int roleId, bool isLocked, int attemptsRemainding)
-        : userNumber(userNumber), username(username), encryptedPassword(encryptedPassword), roleId(roleId),
-        isLocked(isLocked), attemptsRemainding(attemptsRemainding) {};
+    // stoi(fields[0]), fields[1], fields[2], stoi(fields[3]), (lockedStr == "1"), stoi(attemptsStr)
+    UserDataBuffer(vector<string> UserData);
 };
 // fills with spaces to match field width
 string padString(const string &value, int width);
@@ -50,11 +30,7 @@ class UserManager
 public:
     // Finds User By Username
     static void FindUserByUsername(const string &username);
-    // Finds PatientInfo
-    static IUserProfile *getProfileInfo(int roleNumber, int userNumber);
-
     static vector<UserDataBuffer*> getAllUsers();
-    static vector<IUserProfile*> getAllUserProfile();
     static vector<string> getFields(const string &filePath);
 
     // Increments failed login attempts

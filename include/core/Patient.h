@@ -1,15 +1,8 @@
 #pragma once
 
 #include <User.h>
-
-constexpr int PATIENT_NUMBER = 5;
-constexpr int PATIENT_FIRST_NAME = 16;
-constexpr int PATIENT_MIDDLE_NAME = 16;
-constexpr int PATIENT_LAST_NAME = 16;
-constexpr int PATIENT_GENDER = 64;
-constexpr int PATIENT_DOB = 10;
-constexpr int PHONE_NUMBER = 1;
-constexpr int PATIENT_ADDRESS = 1;
+#include <string>
+#include <Helper.h>
 
 struct PatientProfile;
 
@@ -17,7 +10,7 @@ struct PatientProfile;
 class Patient : public User
 {
 public:
-    Patient(UserDataBuffer *data, PatientProfile *userProfile);
+    Patient(UserDataBuffer *data);
     // Getters
     int getPatientNumber() const;
     string getPatientFirstName() const;

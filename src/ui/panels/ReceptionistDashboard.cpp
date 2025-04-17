@@ -1,5 +1,6 @@
 #include <Dashboard.h>
 #include <Settings.h>
+#include <Helper.h>
 
 /* ---------------- Receptionist Dashboard ---------------- */
 ReceptionistDashboard::ReceptionistDashboard(wxPanel *parent) : Dashboard(parent) { buildUI(); }

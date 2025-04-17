@@ -1,5 +1,6 @@
 #include <Dashboard.h>
 #include <Settings.h>
+#include <Helper.h>
 
 /* ---------------- Psycologist Dashboard ---------------- */
 PsychologistDashboard::PsychologistDashboard(wxPanel *parent) : Dashboard(parent) { buildUI(); }

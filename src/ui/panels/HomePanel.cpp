@@ -1,6 +1,7 @@
 #include <HomePanel.h>
 #include <MainFrame.h>
 #include <Settings.h>
+#include <Helper.h>
 #include <Employee.h>
 #include <Patient.h>
 #include <Session.h>

@@ -2,6 +2,8 @@
 #include <Employee.h>
 #include <Patient.h>
 #include <Encryption.h>
+#include <Constants.h>
+#include <Helper.h>
 #include <Session.h>
 #include <fstream>
 #include <wx/wx.h>
@@ -22,7 +24,7 @@ unsigned int Session::Login(string &username, string &password)
         if (!UserManager::ValidateCredentials(username, password))
             return 1;
         // Pad variable for comparison
-        username = padString(username, USERNAME_WIDTH);
+        username = padString(username, USERNAME_LENGTH);
         // Load user data from file
         UserManager::FindUserByUsername(username);
         UserDataBuffer *data = UserManager::getData();
@@ -37,7 +39,7 @@ unsigned int Session::Login(string &username, string &password)
         Encrypt::getInstance().readKeyFromFile("../../data/encryption.key", key);
         // Encrypts the password the user gave us to we can check it against the one we have in our database
         password = Encrypt::getInstance().xorEncryptDecrypt(password, key);
-        password = padString(password, PASSWORD_WIDTH);
+        password = padString(password, PASSWORD_LENGTH);
         // checks if the passwords matches; If password does not match an Error is given
         if (password != data->encryptedPassword)
         {
@@ -51,27 +53,8 @@ unsigned int Session::Login(string &username, string &password)
         {
             delete currentUser;
         }
-        IUserProfile *profile = UserManager::getProfileInfo(data->roleId, data->userNumber);
-        // Check if user is employee or patient
-        if (data->roleId == 7)
-        {
-            auto *patientProfile = dynamic_cast<PatientProfile *>(profile);
-            if (!patientProfile)
-            {
-                throw runtime_error("Invalid cast to PatientProfile");
-            }
-            currentUser = new Patient(data, patientProfile);
-            currentUser->show();
-        }
-        else
-        {
-            auto *employeeProfile = dynamic_cast<EmployeeProfile *>(profile);
-            if (!employeeProfile)
-            {
-                throw runtime_error("Invalid cast to EmployeeProfile");
-            }
-            currentUser = new Employee(data, employeeProfile);
-        }
+        // Check if user is employee or patient and Creates them
+        currentUser = (data->roleId == 7) ? static_cast<User*>(new Patient(data)) : static_cast<User*>(new Employee(data));
         // Error if user is not created successfully
         if (!currentUser)
             throw runtime_error("User failed to initialize");
