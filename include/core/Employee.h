@@ -7,7 +7,7 @@
 class Employee : public User
 {
 public:
-    Employee(UserDataBuffer *data);
+    Employee(User &data);
     // Getters
     int getId() const;
     string getFirstName() const;

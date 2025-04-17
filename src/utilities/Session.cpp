@@ -9,6 +9,7 @@
 #include <wx/wx.h>
 
 User *Session::currentUser = nullptr;
+User *Session::unAuthUser = nullptr;
 
 const User *Session::GetCurrentUser()
 {
@@ -26,12 +27,10 @@ unsigned int Session::Login(string &username, string &password)
         // Pad variable for comparison
         username = padString(username, USERNAME_LENGTH);
         // Load user data from file
-        UserManager::FindUserByUsername(username);
-        UserDataBuffer *data = UserManager::getData();
-        if (!data)
-            return 1;
+        vector<string> userInfo = UserManager::FindUserByUsername(username);
+        unAuthUser =  new User(userInfo);
         // Check if account is locked
-        if (data->isLocked)
+        if (unAuthUser->locked())
             throw runtime_error("Unable to sign in user is locked. An admin is needed");
         // Variable to store encryption key
         string key;
@@ -41,24 +40,26 @@ unsigned int Session::Login(string &username, string &password)
         password = Encrypt::getInstance().xorEncryptDecrypt(password, key);
         password = padString(password, PASSWORD_LENGTH);
         // checks if the passwords matches; If password does not match an Error is given
-        if (password != data->encryptedPassword)
+        if (password != unAuthUser->getPassword())
         {
             stringstream ss;
-            ss << "Password is incorrect. You have " << data->attemptsRemainding << " attempts remaining.";
-            UserManager::decrementAttempts(*data);
+            ss << "Password is incorrect. You have " << unAuthUser->getAttemptsRemaining() << " attempts remaining.";
+            UserManager::decrementAttempts(*unAuthUser);
             throw runtime_error(ss.str());
         }
+        UserManager::LoadUserData(*unAuthUser);
         // Delete previous session if exist
         if (currentUser)
         {
             delete currentUser;
         }
         // Check if user is employee or patient and Creates them
-        currentUser = (data->roleId == 7) ? static_cast<User*>(new Patient(data)) : static_cast<User*>(new Employee(data));
+        currentUser = (stoi(userInfo[3]) == 7) ? static_cast<User *>(new Patient(*unAuthUser)) : static_cast<User *>(new Employee(*unAuthUser));
         // Error if user is not created successfully
         if (!currentUser)
             throw runtime_error("User failed to initialize");
-        UserManager::resetAttempts(*data);
+        delete unAuthUser;
+        UserManager::resetAttempts(*currentUser);
     }
     catch (const std::exception &e)
     {

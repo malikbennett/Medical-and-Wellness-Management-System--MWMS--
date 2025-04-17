@@ -22,6 +22,8 @@ public:
 private:
     wxPanel *parent;
 
+    void OnBookAppointment(wxCommandEvent &event);
+
 protected:
     wxNotebook *notebook;
     wxFont headingFont;
@@ -82,7 +84,6 @@ class PatientDashboard : public Dashboard
 public:
     PatientDashboard(wxPanel *parent);
     void buildUI() override;
-    wxPanel* createAppointmentsTab();
     wxPanel* createMedicalHistoryTab();
 
 };

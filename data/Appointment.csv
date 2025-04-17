@@ -1,0 +1,4 @@
+appointmentNumber,patientNumber,doctorNumber,appointmentDate,time,status,
+1001 ,1001 ,7    ,2025-04-17,09:00 AM,Scheduled ,
+1002 ,1001 ,7    ,2025-04-17,09:00 AM,Scheduled ,
+1003 ,1001 ,12   ,2025-04-23,09:00 AM,Scheduled ,

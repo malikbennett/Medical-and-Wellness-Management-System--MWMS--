@@ -3,7 +3,6 @@
 #include <Settings.h>
 #include <UserManager.h>
 #include <ListViewCtrl.h>
-#include <wx/listctrl.h>
 
 /* ---------------- Admin Dashboard ---------------- */
 AdminDashboard::AdminDashboard(wxPanel *parent) : Dashboard(parent) { buildUI(); }

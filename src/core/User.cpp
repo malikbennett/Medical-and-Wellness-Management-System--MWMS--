@@ -5,34 +5,37 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <Helper.h>
 
 User::User(int userNumber, const string &username,const string& password, Role role)
-    : jobRole(role)
+    : jobRole(role), username(username), password(password)
 {
     setUserNumber(userNumber);
-    this->username = username;
-    this->password = password;
-}
-User::User(UserDataBuffer *data)
-{
-    setUserNumber(data->userNumber);
-    this->username = trimString(data->username);
-    this->password = trimString(data->encryptedPassword);
-    this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, data->roleId);
 }
 
-const int User::getUserNumber() const
+User::User(vector<string> UserData): userNumber(stoi(UserData[0])), username(UserData[1]),
+password(UserData[2]), attemptsRemaining(stoi(UserData[4])) ,isLocked((UserData[5] == "1")){
+    this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, stoi(UserData[3]));
+};
+
+User::User(User &data)
 {
-    return this->userNumber;
+    setUserNumber(data. getUserNumber());
+    this->username = trimString(data.getUsername());
+    this->password = trimString(data.getPassword());
+    this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, data.getRole().roleNumber);
 }
-const string User::getUserName() const
-{
-    return this->username;
-}
-const Role& User::getRole() const
-{
-    return this->jobRole;
-}
+
+void User::setProfileRecords(vector<string> ProfileRecords){this->ProfileRecords = ProfileRecords;}
+void User::setAttemptsRemaining(int i) { this->attemptsRemaining = 1; };
+void User::toggleLock(){this->isLocked = !this->isLocked;}
+const int User::getUserNumber() const {return this->userNumber;}
+const string User::getUsername() const {return this->username;}
+const string User::getPassword() const {return this->password;}
+const bool User::locked() const {return this->isLocked;}
+const int User::getAttemptsRemaining() const {return this->attemptsRemaining;}
+const vector<string> &User::getProfileRecords() const {return this->ProfileRecords;}
+const Role& User::getRole() const {return this->jobRole;}
 
 void User::setUserNumber(int userNumber)
 {

@@ -23,8 +23,8 @@ public:
 
   // Constant Settings Data ; these cannot be changed elsewhere
   const string windowTitle = "MWMS";
-  const int windowWidth = 1280;
-  const int windowHeight = 720;
+  const int windowWidth = 960;
+  const int windowHeight = 540;
   ColorPalette colors;
 
 private:

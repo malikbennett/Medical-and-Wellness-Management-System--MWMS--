@@ -20,7 +20,6 @@ void LoginPanel::buildUI()
 
     // Create the sizer that will arrange items vertically
     wxBoxSizer *loginSizer = new wxBoxSizer(wxVERTICAL);
-    this->SetSizer(loginSizer);
 
     wxStaticText *firstHeader = new wxStaticText(this, wxID_ANY, "Welcome Back",wxDefaultPosition,wxDefaultSize,wxALIGN_CENTER);
     firstHeader->SetFont(wxFont(18, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
@@ -43,12 +42,13 @@ void LoginPanel::buildUI()
     this->loginBtn->SetBackgroundColour(Settings::getInstance().colors.primary);
     this->loginBtn->Bind(wxEVT_BUTTON, &LoginPanel::onLogin, this);
 
-    loginSizer->Add(firstHeader, 0, wxEXPAND | wxALL, margin);
-    loginSizer->Add(subText, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    loginSizer->Add(usernameField, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    loginSizer->Add(passwordField, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    loginSizer->Add(loginBtn, 0, wxEXPAND | wxALL, margin);
+    loginSizer->Add(firstHeader, 1, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(subText, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(usernameField, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(passwordField, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(loginBtn, 1, wxEXPAND | wxALL, margin);
 
+    this->SetSizer(loginSizer);
     loginSizer->Layout();
 }
 

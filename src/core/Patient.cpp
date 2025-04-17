@@ -3,24 +3,25 @@
 #include <iostream>
 #include <string>
 
-Patient::Patient(UserDataBuffer *data)
+Patient::Patient(User &data)
     : User(data)
 {
-    this->patientNumber = stoi(data->ProfileRecords[1]);
-    this->patientfirstName =trimString(data->ProfileRecords[2]);
-    this->patientmiddleName =trimString(data->ProfileRecords[3]);
-    this->patientlastName =trimString(data->ProfileRecords[4]);
-    this->trn = stoi(data->ProfileRecords[5]);
-    this->patientDOB = Date::toDate(data->ProfileRecords[6]);
-    this->firstVisit = Date::toDate(data->ProfileRecords[7]);
-    this->patientGender =trimString(data->ProfileRecords[8]);
-    this->martialStatus =trimString(data->ProfileRecords[9]);
-    this->nextOfKin =trimString(data->ProfileRecords[10]);
-    this->nextOfKinContact = Phone::toPhone(data->ProfileRecords[11]);
-    this->medicalHistory =trimString(data->ProfileRecords[12]);
-    this->emailAddress =trimString(data->ProfileRecords[13]);
-    this->phoneNumber = Phone::toPhone(data->ProfileRecords[14]);
-    this->patientAddress = Address::toAddress(data->ProfileRecords[15]);
+    auto pR = data.getProfileRecords();
+    this->patientNumber = stoi(pR[1]);
+    this->patientfirstName =trimString(pR[2]);
+    this->patientmiddleName =trimString(pR[3]);
+    this->patientlastName =trimString(pR[4]);
+    this->trn = stoi(pR[5]);
+    this->patientDOB = Date::toDate(pR[6]);
+    this->firstVisit = Date::toDate(pR[7]);
+    this->patientGender =trimString(pR[8]);
+    this->martialStatus =trimString(pR[9]);
+    this->nextOfKin =trimString(pR[10]);
+    this->nextOfKinContact = Phone::toPhone(pR[11]);
+    this->medicalHistory =trimString(pR[12]);
+    this->emailAddress =trimString(pR[13]);
+    this->phoneNumber = Phone::toPhone(pR[14]);
+    this->patientAddress = Address::toAddress(pR[15]);
 };
 
 int Patient::getPatientNumber() const { return this->patientNumber; }

@@ -10,7 +10,7 @@ struct PatientProfile;
 class Patient : public User
 {
 public:
-    Patient(UserDataBuffer *data);
+    Patient(User &data);
     // Getters
     int getPatientNumber() const;
     string getPatientFirstName() const;

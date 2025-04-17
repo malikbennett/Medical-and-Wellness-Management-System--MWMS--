@@ -7,104 +7,51 @@
 #include <Helper.h>
 #include <Constants.h>
 
-UserDataBuffer *UserManager::data = nullptr;
 const string UserManager::userInfoPath = "../../data/UserInfo.csv";
 const string UserManager::patientInfoPath = "../../data/PatientInfo.csv";
 const string UserManager::employeeInfoPath = "../../data/EmployeeInfo.csv";
 
-UserDataBuffer::UserDataBuffer(vector<string> UserData): UserData(UserData),
-userNumber(stoi(UserData[0])), username(UserData[1]), encryptedPassword(UserData[2]),
-roleId(stoi(UserData[3])),attemptsRemainding(stoi(UserData[4])) ,isLocked((UserData[5] == "1")){};
-
 // Gets current user and ProfileData
-void UserManager::FindUserByUsername(const string &username)
+void UserManager::LoadUserData(User &data)
 {
     try
     {
-        // If no userData is loaded or loaded userData is not the one requested, reload
-        if (!data || data->username != username)
+        ifstream file;
+        // Opens Correct Database
+        if (data.getRole().roleNumber == 7)
+            file.open(patientInfoPath);
+        else
+            file.open(employeeInfoPath);
+        // Checks if file open correctly
+        if (!file.is_open())
+            throw runtime_error("File failed to open");
+        string line;
+        // Skip first line
+        getline(file, line);
+        // Loops through each line and gets userProfileInfo
+        while (getline(file, line))
         {
-            // save old data if loaded userData is not the one requested
-            if (data)
+            istringstream ss(line);
+            vector<string> fields;
+            string token;
+            while (getline(ss, token, ','))
+                fields.push_back(token);
+            if (fields.size() < 16 && data.getRole().roleNumber == 7)
+                continue;
+            if (fields.size() < 12 && data.getRole().roleNumber != 7)
+                continue;
+            if (stoi(fields.at(0)) != data.getUserNumber())
+                continue;
+            if (data.getRole().roleNumber == 7) // Patient
             {
-                saveUserData(*data);
-                delete data;
-                data = nullptr;
+                data.setProfileRecords(fields);
             }
-            // Opens User Info file
-            ifstream file(userInfoPath);
-            if (!file.is_open())
+            else // Employee
             {
-                // Returns an error is file did not open successfully
-                throw runtime_error("User File Information Could not open");
+                data.setProfileRecords(fields);
             }
-            // Variable to store record
-            string line;
-            // Skips first line
-            getline(file, line);
-            // Loops through each line and gets userData
-            while (getline(file, line))
-            {
-                // Initialize a stringstream to parse record into individual fields
-                istringstream ss(line);
-                // Variable to store each field
-                string token;
-                // Vectoe to store fields
-                vector<string> fields;
-                // Split up and store each line into tokens
-                while (getline(ss, token, ','))
-                {
-                    fields.push_back(token);
-                }
-                // Skips through each record and check if the username matches with any in our databased
-                if (fields[1] != username)
-                    continue;
-                // Initialize UserData object
-                data = new UserDataBuffer(fields);
-                break;
-            }
-            // An Error is given if after skipping through each record username does not match any
-            if (!data)
-            {
-                throw runtime_error("Invalid Credentials.");
-            }
-            // closes file
-            file.close();
-            // Opens Correct Database
-            if (data->roleId == 7)
-                file.open(patientInfoPath);
-            else
-                file.open(employeeInfoPath);
-            // Checks if file open correctly
-            if (!file.is_open())
-                throw runtime_error("File failed to open");
-            // Skip first line
-            getline(file, line);
-            // Loops through each line and gets userProfileInfo
-            while (getline(file, line))
-            {
-                istringstream ss(line);
-                vector<string> fields;
-                string token;
-                while (getline(ss, token, ','))
-                    fields.push_back(token);
-                if (fields.size() < 16 && data->roleId == 7)
-                    continue;
-                if (fields.size() < 12 && data->roleId != 7)
-                    continue;
-                if (stoi(fields.at(0)) != data->userNumber)
-                    continue;
-                if (data->roleId == 7) // Patient
-                {
-                    data->ProfileRecords = fields;
-                }
-                else // Employee
-                {
-                    data->ProfileRecords = fields;
-                }
-            }
-            file.close();
         }
+        file.close();
     }
     catch (const std::exception &e)
     {
@@ -112,12 +59,58 @@ void UserManager::FindUserByUsername(const string &username)
         wxMessageBox(e.what(), "Login Error", wxICON_ERROR);
     }
 }
-// Gets all users and Profile Data
-vector<UserDataBuffer *> UserManager::getAllUsers()
+
+vector<string> UserManager::FindUserByUsername(const string &username)
 {
     try
     {
-        vector<UserDataBuffer *> users;
+        // Opens User Info file
+        ifstream file(userInfoPath);
+        if (!file.is_open())
+        {
+            // Returns an error is file did not open successfully
+            throw runtime_error("User File Information Could not open");
+        }
+        // Variable to store record
+        string line;
+        // Skips first line
+        getline(file, line);
+        // Loops through each line and gets userData
+        while (getline(file, line))
+        {
+            // Initialize a stringstream to parse record into individual fields
+            istringstream ss(line);
+            // Variable to store each field
+            string token;
+            // Vectoe to store fields
+            vector<string> fields;
+            // Split up and store each line into tokens
+            while (getline(ss, token, ','))
+            {
+                fields.push_back(token);
+            }
+            // Skips through each record and check if the username matches with any in our databased
+            if (fields[1] != username)
+                continue;
+            // Initialize UserData object
+            return fields;
+            break;
+        }
+        // closes file
+        file.close();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+}
+
+// Gets all users and Profile Data
+vector<User *> UserManager::getAllUsers(int roleNumber)
+{
+    try
+    {
+        vector<User *> users;
         ifstream file(userInfoPath);
         if (!file.is_open())
             throw runtime_error("User File Information Could not open");
@@ -130,8 +123,11 @@ vector<UserDataBuffer *> UserManager::getAllUsers()
             vector<string> fields;
             while (getline(ss, token, ','))
                 fields.push_back(token);
-            UserDataBuffer *user = new UserDataBuffer(fields);
-            string profilePath = (user->roleId == 7) ? patientInfoPath : employeeInfoPath;
+            // sorts users by roles or if its 0 gets all users
+            if (stoi(fields[3]) != roleNumber && roleNumber != 0)
+                continue;
+            User *user = new User(fields);
+            string profilePath = (user->getRole().roleNumber == 7) ? patientInfoPath : employeeInfoPath;
             ifstream profileFile(profilePath);
             if (!profileFile.is_open())
                 throw runtime_error("Profile file failed to open");
@@ -144,13 +140,13 @@ vector<UserDataBuffer *> UserManager::getAllUsers()
                 vector<string> profileFields;
                 while (getline(profileSS, profileToken, ','))
                     profileFields.push_back(profileToken);
-                if (user->roleId == 7 && profileFields.size() < 16)
+                if (user->getRole().roleNumber == 7 && profileFields.size() < 16)
                     continue;
-                if (user->roleId != 7 && profileFields.size() < 12)
+                if (user->getRole().roleNumber != 7 && profileFields.size() < 12)
                     continue;
-                if (stoi(profileFields[0]) != user->userNumber)
+                if (stoi(profileFields[0]) != user->getUserNumber())
                     continue;
-                user->ProfileRecords = profileFields;
+                user->setProfileRecords(profileFields);
                 break;
             }
             profileFile.close();
@@ -165,38 +161,6 @@ vector<UserDataBuffer *> UserManager::getAllUsers()
         return {};
     }
 }
-
-vector<string> UserManager::getFields(const string &filePath)
-{
-    vector<string> fields;
-    try
-    {
-        ifstream file;
-        file.open(filePath);
-        if (file.fail())
-        {
-            throw runtime_error("File fail to open");
-        }
-        string line;
-        getline(file, line);
-        istringstream ss(line);
-        string token;
-        while (getline(ss, token, ','))
-        {
-            fields.push_back(token);
-        }
-        if (fields.empty())
-        {
-            throw runtime_error("Error retrieving fields");
-        }
-        return fields;
-    }
-    catch (exception e)
-    {
-        cerr << e.what() << endl;
-    }
-    return fields;
-};
 
 bool UserManager::ValidateCredentials(const string &username, const string &password)
 {
@@ -218,40 +182,32 @@ bool UserManager::ValidateCredentials(const string &username, const string &pass
     return false;
 }
 
-void UserManager::decrementAttempts(UserDataBuffer &userData)
-{
-    if (userData.attemptsRemainding == 1)
+void UserManager::decrementAttempts(User &userData) {
+    if (userData.getAttemptsRemaining() == 1)
     {
-        lockAccount(userData);
+        if (!userData.locked())
+            userData.toggleLock();
     }
     else
     {
-        userData.attemptsRemainding--;
+        userData.setAttemptsRemaining(userData.getAttemptsRemaining() - 1);
     }
+    saveUserData(userData);
 };
 
-void UserManager::resetAttempts(UserDataBuffer &userData)
+void UserManager::resetAttempts(User &userData)
 {
-    userData.attemptsRemainding = 3;
+    userData.setAttemptsRemaining(3);
+    saveUserData(userData);
 };
 
-void UserManager::lockAccount(UserDataBuffer &userData)
-{
-    userData.isLocked = 1;
-};
-
-void UserManager::unlockAccount(UserDataBuffer &userData)
-{
-    userData.isLocked = 0;
-};
-
-void UserManager::saveUserData(const UserDataBuffer &userData)
+void UserManager::saveUserData(const User &userData)
 {
     try
     {
         // width of each field
         const int fieldWidths[6] = {USER_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
-        int colSize = getFields(userInfoPath).size();
+        int colSize = getFileFields(userInfoPath).size();
         // total line size + colSize(to account for ',')
         const int totalWidth = USER_NUMBER_LENGTH + USERNAME_LENGTH + PASSWORD_LENGTH + ROLE_NUMBER_LENGTH + ATTEMPTS_REMAINING_LENGTH + ACCOUNT_LOCKED_LENGTH + colSize;
         // Open User info File
@@ -268,19 +224,17 @@ void UserManager::saveUserData(const UserDataBuffer &userData)
         while (getline(file, line))
         {
             // Compare the first n amount (i.e USER_NUMBER) of char
-            if (stoi(line.substr(0, fieldWidths[0])) == userData.userNumber)
-            {
+            if (stoi(line.substr(0, fieldWidths[0])) == userData.getUserNumber())
                 break;
-            }
             ++lineNum;
         }
         stringstream ss;
-        ss << padString(to_string(userData.userNumber), USER_NUMBER_LENGTH)
-           << ',' << userData.username
-           << ',' << userData.encryptedPassword
-           << ',' << padString(to_string(userData.roleId), ROLE_NUMBER_LENGTH)
-           << ',' << padString(to_string(userData.attemptsRemainding), ATTEMPTS_REMAINING_LENGTH)
-           << ',' << padString((userData.isLocked) ? "1" : "0", ACCOUNT_LOCKED_LENGTH);
+        ss << padString(to_string(userData.getUserNumber()), USER_NUMBER_LENGTH)
+           << ',' << userData.getUsername()
+           << ',' << userData.getPassword()
+           << ',' << padString(to_string(userData.getRole().roleNumber), ROLE_NUMBER_LENGTH)
+           << ',' << padString(to_string(userData.getAttemptsRemaining()), ATTEMPTS_REMAINING_LENGTH)
+           << ',' << padString((userData.locked()) ? "1" : "0", ACCOUNT_LOCKED_LENGTH);
         // Calculate byte offset
         int offset = lineNum * (totalWidth + 1); // +1 for newline
         // Seek to position and overwrite
@@ -293,8 +247,3 @@ void UserManager::saveUserData(const UserDataBuffer &userData)
         std::cerr << e.what() << '\n';
     }
 }
-
-UserDataBuffer *UserManager::getData()
-{
-    return data;
-};

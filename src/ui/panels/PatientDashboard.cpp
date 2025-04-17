@@ -18,13 +18,6 @@ void PatientDashboard::buildUI()
     // Add to Main Sizer
     sizer->Add(this->notebook, 1, wxEXPAND | wxALL);
 }
-wxPanel *PatientDashboard::createAppointmentsTab()
-{
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetSizer(sizer);
-    return panel;
-};
 wxPanel *PatientDashboard::createMedicalHistoryTab()
 {
     wxPanel *panel = new wxPanel(notebook);

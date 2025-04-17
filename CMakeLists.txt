@@ -11,6 +11,7 @@ set(SOURCES
     src/core/Patient.cpp
     src/core/Employee.cpp
     src/core/Role.cpp
+    src/core/Appointment.cpp
     src/utilities/Session.cpp
     src/utilities/UserManager.cpp
     src/ui/MainFrame.cpp
@@ -24,6 +25,7 @@ set(SOURCES
     src/ui/panels/PatientDashboard.cpp
     src/ui/panels/PsychologistDashboard.cpp
     src/ui/panels/ReceptionistDashboard.cpp
+    src/ui/dialog/BookAppointmentDialog.cpp
 )
 
 set(INCLUDES
@@ -31,10 +33,12 @@ set(INCLUDES
     include/ui
     include/ui/panels
     include/ui/lists
+    include/ui/dialog
     include/utilities
 )
 
-find_package(wxWidgets REQUIRED COMPONENTS core base)
+find_package(wxWidgets REQUIRED COMPONENTS core base adv)
+
 include(${wxWidgets_USE_FILE})
 
 add_executable(${PROJECT_NAME} ${SOURCES})

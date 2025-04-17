@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <stdexcept>
-#include <iostream> // for cout and cerr
-
+#include <iostream>
+#include <Helper.h>
 #include <UserManager.h>
 #include <wx/wx.h>
 #include <wx/listctrl.h>
@@ -16,20 +16,19 @@ class ListView : public wxListCtrl
 public:
     ListView(wxPanel *parent, wxWindowID id, const wxPoint &pos, const wxSize &size) : wxListCtrl(parent, id, pos, size, wxLC_REPORT | wxLC_VIRTUAL)
     {
-        this->usrfields = UserManager::getFields(UserManager::userInfoPath);
-        this->empfields = UserManager::getFields(UserManager::employeeInfoPath);
-        this->patfields = UserManager::getFields(UserManager::patientInfoPath);
+        this->usrfields = getFileFields(UserManager::userInfoPath);
+        this->empfields = getFileFields(UserManager::employeeInfoPath);
+        this->patfields = getFileFields(UserManager::patientInfoPath);
     };
 
     void loadEmployeeFields()
     {
-        vector<UserDataBuffer *> allUsers = UserManager::getAllUsers();
+        auto allUsers = UserManager::getAllUsers();
         this->users.clear();
-
         // Only keep users who are NOT patients (i.e., roleId != 7)
         for (auto *user : allUsers)
         {
-            if (user->roleId != 7)
+            if (user->getRole().roleNumber != 7)
             {
                 this->users.push_back(user);
             }
@@ -58,7 +57,7 @@ public:
         // Only keep users who are patients (i.e., roleId = 7)
         for (auto *user : allUsers)
         {
-            if (user->roleId == 7)
+            if (user->getRole().roleNumber == 7)
             {
                 this->users.push_back(user);
             }
@@ -79,89 +78,91 @@ public:
             this->AppendColumn(patfields[i]);
         }
     }
+    void loadAptmentsFields(){
 
+    }
     virtual wxString OnGetItemText(long index, long column) const override
     {
-        UserDataBuffer *user = this->users.at(index);
+        User *user = this->users.at(index);
         switch (column)
         {
         case 0:
-            return wxString::Format("%d", user->userNumber);
+            return wxString::Format("%d", user->getUserNumber());
         case 1:
-            return trimString(user->username);
+            return trimString(user->getUsername());
         case 2:
-            return trimString(user->encryptedPassword);
+            return trimString(user->getPassword());
         case 3:
-            return wxString::Format("%d", user->roleId);
+            return wxString::Format("%d", user->getRole().roleNumber);
         case 4:
-            return wxString::Format("%d", user->attemptsRemainding);
+            return wxString::Format("%d", user->getAttemptsRemaining());
         case 5:
-            return (user->isLocked) ? "yes" : "no";
+            return (user->locked()) ? "yes" : "no";
         }
         // Only access Employee Profile fields
-        if (user->roleId != 7)
+        if (user->getRole().roleNumber != 7)
         {
             switch (column)
             {
             case 6:
-                return user->ProfileRecords[1];
+                return user->getProfileRecords()[1];
             case 7:
-                return user->ProfileRecords[2];
+                return user->getProfileRecords()[2];
             case 8:
-                return user->ProfileRecords[3];
+                return user->getProfileRecords()[3];
             case 9:
-                return user->ProfileRecords[4];
+                return user->getProfileRecords()[4];
             case 10:
-                return user->ProfileRecords[5];
+                return user->getProfileRecords()[5];
             case 11:
-                return user->ProfileRecords[6];
+                return user->getProfileRecords()[6];
             case 12:
-                return user->ProfileRecords[7];
+                return user->getProfileRecords()[7];
             case 13:
-                return user->ProfileRecords[8];
+                return user->getProfileRecords()[8];
             case 14:
-                return user->ProfileRecords[9];
+                return user->getProfileRecords()[9];
             case 15:
-                return user->ProfileRecords[10];
+                return user->getProfileRecords()[10];
             case 16:
-                return user->ProfileRecords[11];
+                return user->getProfileRecords()[11];
             }
         }
         // Only access Patient Profile fields
-        if (user->roleId == 7)
+        if (user->getRole().roleNumber == 7)
         {
             switch (column)
             {
             case 6:
-                return user->ProfileRecords[1];
+                return user->getProfileRecords()[1];
             case 7:
-                return user->ProfileRecords[2];
+                return user->getProfileRecords()[2];
             case 8:
-                return user->ProfileRecords[3];
+                return user->getProfileRecords()[3];
             case 9:
-                return user->ProfileRecords[4];
+                return user->getProfileRecords()[4];
             case 10:
-                return user->ProfileRecords[5];
+                return user->getProfileRecords()[5];
             case 11:
-                return user->ProfileRecords[6];
+                return user->getProfileRecords()[6];
             case 12:
-                return user->ProfileRecords[7];
+                return user->getProfileRecords()[7];
             case 13:
-                return user->ProfileRecords[8];
+                return user->getProfileRecords()[8];
             case 14:
-                return user->ProfileRecords[9];
+                return user->getProfileRecords()[9];
             case 15:
-                return user->ProfileRecords[10];
+                return user->getProfileRecords()[10];
             case 16:
-                return user->ProfileRecords[11];
+                return user->getProfileRecords()[11];
             case 17:
-                return user->ProfileRecords[12];
+                return user->getProfileRecords()[12];
             case 18:
-                return user->ProfileRecords[13];
+                return user->getProfileRecords()[13];
             case 19:
-                return user->ProfileRecords[14];
+                return user->getProfileRecords()[14];
             case 20:
-                return user->ProfileRecords[15];
+                return user->getProfileRecords()[15];
             }
         }
         return " ";
@@ -177,5 +178,5 @@ private:
     vector<string> usrfields;
     vector<string> empfields;
     vector<string> patfields;
-    vector<UserDataBuffer *> users;
+    vector<User *> users;
 };
