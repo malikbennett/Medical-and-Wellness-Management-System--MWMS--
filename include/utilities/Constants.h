@@ -1,5 +1,27 @@
 #pragma once
 
+struct ColorPalette {
+    wxColor background;
+    wxColor surface;
+    wxColor surfaceLight;
+
+    wxColor primary;
+    wxColor primaryDark;
+
+    wxColor secondary;
+    wxColor secondaryDark;
+
+    wxColor textPrimaryLight;
+    wxColor textPrimary;
+    wxColor textPrimaryDark;
+
+    wxColor textSecondaryLight;
+    wxColor textSecondary;
+    wxColor textSecondaryDark;
+
+    wxColor error;
+};
+
 constexpr int BASIC_LENGTH_10 = 16;
 constexpr int BASIC_LENGTH_12 = 16;
 constexpr int BASIC_LENGTH_16 = 16;
