@@ -1,20 +1,21 @@
 #include <UserManager.h>
 #include <User.h>
 #include <Employee.h>
+#include <Helper.h>
 
 Employee::Employee(UserDataBuffer *data) : User(data)
 {
     this->id = stoi(data->ProfileRecords[1]);
-    this->firstName = data->ProfileRecords[2];
-    this->middleName = data->ProfileRecords[3];
-    this->lastName = data->ProfileRecords[4];
+    this->firstName = trimString(data->ProfileRecords[2]);
+    this->middleName = trimString(data->ProfileRecords[3]);
+    this->lastName = trimString(data->ProfileRecords[4]);
     this->dob = Date::toDate(data->ProfileRecords[5]);
     this->employmentDate = Date::toDate(data->ProfileRecords[6]);
-    this->department = data->ProfileRecords[7];
-    this->gender = data->ProfileRecords[8];
-    this->trn = data->ProfileRecords[9];
-    this->jobTitle = data->ProfileRecords[10];
-    this->supervisor = data->ProfileRecords[11];
+    this->department = trimString(data->ProfileRecords[7]);
+    this->gender = trimString(data->ProfileRecords[8]);
+    this->trn = trimString(data->ProfileRecords[9]);
+    this->jobTitle = trimString(data->ProfileRecords[10]);
+    this->supervisor = trimString(data->ProfileRecords[11]);
 };
 
 int Employee::getId() const { return id; }
