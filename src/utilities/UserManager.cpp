@@ -115,7 +115,8 @@ vector<User *> UserManager::getAllUsers(int roleNumber)
         if (!file.is_open())
             throw runtime_error("User File Information Could not open");
         string line;
-        getline(file, line); // Skip header
+        string header;
+        getline(file, header); // Skip header
         while (getline(file, line))
         {
             istringstream ss(line);
@@ -182,7 +183,8 @@ bool UserManager::ValidateCredentials(const string &username, const string &pass
     return false;
 }
 
-void UserManager::decrementAttempts(User &userData) {
+void UserManager::decrementAttempts(User &userData)
+{
     if (userData.getAttemptsRemaining() == 1)
     {
         if (!userData.locked())
@@ -211,35 +213,51 @@ void UserManager::saveUserData(const User &userData)
         // total line size + colSize(to account for ',')
         const int totalWidth = USER_NUMBER_LENGTH + USERNAME_LENGTH + PASSWORD_LENGTH + ROLE_NUMBER_LENGTH + ATTEMPTS_REMAINING_LENGTH + ACCOUNT_LOCKED_LENGTH + colSize;
         // Open User info File
-        fstream file(userInfoPath, ios::in | ios::out);
+        fstream file(userInfoPath, ios::in | ios::out | ios::binary);
         if (!file.is_open())
         {
             // Returns an error is file did not open successfully
             throw runtime_error("User File Information Could not open");
         }
+        string header;
+        getline(file, header); // Skip header
         // Variable to store record
         string line;
+        streampos start = file.tellg();
         int lineNum = 0;
+        bool found = false;
         // Find User we need to save in file
         while (getline(file, line))
         {
             // Compare the first n amount (i.e USER_NUMBER) of char
             if (stoi(line.substr(0, fieldWidths[0])) == userData.getUserNumber())
+            {
+                found = true;
                 break;
+            }
             ++lineNum;
         }
         stringstream ss;
         ss << padString(to_string(userData.getUserNumber()), USER_NUMBER_LENGTH)
-           << ',' << userData.getUsername()
-           << ',' << userData.getPassword()
+           << ',' << padString(userData.getUsername(), USERNAME_LENGTH)
+           << ',' << padString(userData.getPassword(), PASSWORD_LENGTH)
            << ',' << padString(to_string(userData.getRole().roleNumber), ROLE_NUMBER_LENGTH)
            << ',' << padString(to_string(userData.getAttemptsRemaining()), ATTEMPTS_REMAINING_LENGTH)
-           << ',' << padString((userData.locked()) ? "1" : "0", ACCOUNT_LOCKED_LENGTH);
-        // Calculate byte offset
-        int offset = lineNum * (totalWidth + 1); // +1 for newline
-        // Seek to position and overwrite
-        file.seekp(offset, ios::beg);
-        file << ss.str();
+           << ',' << padString((userData.locked()) ? "1" : "0", ACCOUNT_LOCKED_LENGTH)
+           << ',';
+        string record = ss.str();
+        if (record.length() != totalWidth)
+        {
+            cerr << "Record length mismatch. Record is " << record.length() << ", expected " << totalWidth << endl;
+            file.close();
+            return;
+        }
+        if(found){
+            // Go to correct offset (start + lineNum * recordSize)
+            int recordSize = totalWidth + 1; // +1 for newline
+            file.seekp(start + lineNum * recordSize, ios::beg);
+            file << record << '\n'; // overwrite
+        }
         file.close();
     }
     catch (const std::exception &e)

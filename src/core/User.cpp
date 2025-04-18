@@ -20,9 +20,11 @@ password(UserData[2]), attemptsRemaining(stoi(UserData[4])) ,isLocked((UserData[
 
 User::User(User &data)
 {
-    setUserNumber(data. getUserNumber());
+    setUserNumber(data.getUserNumber());
     this->username = trimString(data.getUsername());
     this->password = trimString(data.getPassword());
+    this->attemptsRemaining = data.getAttemptsRemaining();
+    this->isLocked = data.locked();
     this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, data.getRole().roleNumber);
 }
 

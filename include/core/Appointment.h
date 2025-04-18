@@ -18,8 +18,10 @@ class Appointment
 {
 public:
     Appointment(int patientNumber,int doctorNumber,Date appointmentDate,string time,Status status);
+    Appointment(vector<string> aptData);
     void saveAppointment();
     // Getters and Setters
+    static vector<Appointment *> getAllApt();
     int getNewAppointmentNumber();
     int getAppointmentNumber();
     int getPatientNumber();
@@ -33,6 +35,7 @@ public:
     void setAppointmentDate(Date d);
     void setAppointmentTime(const string& t);
     void setStatus(Status s);
+    static string aptInfoPath;
 
 private:
     int appointmentNumber;
@@ -41,7 +44,6 @@ private:
     Date appointmentDate;
     string appointmentTime;
     Status status;
-    string aptInfoPath = "../../data/Appointment.csv";
     int colSize;
     vector<int> fieldWidths;
     int totalWidth;

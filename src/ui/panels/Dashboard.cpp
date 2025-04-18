@@ -34,19 +34,22 @@ wxPanel *Dashboard::createAppointmentsTab()
     wxPanel *panel = new wxPanel(notebook);
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
-    AddText(panel, sizer, "Appointments:", this->headingFont);
 
     wxPanel *topPanel = new wxPanel(panel);
-    wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *topSizer = new wxBoxSizer(wxHORIZONTAL);
+    AddText(topPanel, topSizer, "Appointments:", this->headingFont);
     wxButton *bookAptBtn = new wxButton(topPanel,wxID_OK, "Book Appointment");
     bookAptBtn->SetBackgroundColour(Settings::getInstance().colors.primary);
     bookAptBtn->Bind(wxEVT_BUTTON, &Dashboard::OnBookAppointment, this);
-    topSizer->Add(bookAptBtn, 0, wxALIGN_RIGHT | wxALL, 5);
+    topSizer->AddStretchSpacer();
+    topSizer->Add(bookAptBtn, 0, wxALIGN_CENTER | wxALL, 15);
     topPanel->SetSizer(topSizer);
 
     wxPanel *bottomPanel = new wxPanel(panel);
     wxBoxSizer *bottomSizer = new wxBoxSizer(wxVERTICAL);
     ListView *list = new ListView(bottomPanel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
+    list->loadAppointmentsFields();
+    list->RefreshAfterUpdate();
     bottomSizer->Add(list, 1, wxEXPAND);
     bottomPanel->SetSizer(bottomSizer);
 
@@ -62,14 +65,22 @@ void Dashboard::OnBookAppointment(wxCommandEvent& event)
     BookAppointmentDialog dlg(this);
     if (dlg.ShowModal() == wxID_OK)
     {
+        const User *user = Session::GetCurrentUser();
+        const Employee *emp = dynamic_cast<const Employee *>(user);
+        const Patient *pat = dynamic_cast<const Patient *>(user);
         int doctorNumber = dlg.GetDoctorNumber();
         Date date(dlg.GetDate().Format("%Y-%m-%d").ToStdString());
         string time = dlg.GetTimeSlot().ToStdString();
-
-        Appointment apt(Session::GetCurrentUser()->getUserNumber(),doctorNumber,date,time ,Scheduled);
-        apt.saveAppointment();
-
-        // TODO: Save to file here
+        if (pat)
+        {
+            Appointment apt(pat->getPatientNumber(),doctorNumber,date,time ,Scheduled);
+            apt.saveAppointment();
+        }
+        else if (emp)
+        {
+            Appointment apt(emp->getId(),doctorNumber,date,time ,Scheduled);
+            apt.saveAppointment();
+        }
         wxLogMessage("Booking: Doctor #%d on %s at %s",doctorNumber,dlg.GetDate().FormatISODate(),time);
     }
 }
