@@ -87,19 +87,19 @@ wxPanel *AdminDashboard::createManagePatientsTab()
     return panel;
 }
 
-wxPanel *AdminDashboard::createAppointmentsTab()
-{
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+// wxPanel *AdminDashboard::createAppointmentsTab()
+// {
+//     wxPanel *panel = new wxPanel(notebook);
+//     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
-    AddText(panel, sizer, "Appointment Management:", this->headingFont, 10);
-    ListView *records = new ListView(panel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
-    records->loadAppointmentsFields();
-    records->RefreshAfterUpdate();
-    sizer->Add(records,1,wxEXPAND);
-    panel->SetSizer(sizer);
-    return panel;
-}
+//     AddText(panel, sizer, "Appointment Management:", this->headingFont, 10);
+//     ListView *records = new ListView(panel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
+//     records->loadAppointmentsFields();
+//     records->RefreshAfterUpdate();
+//     sizer->Add(records,1,wxEXPAND);
+//     panel->SetSizer(sizer);
+//     return panel;
+// }
 
 wxPanel *AdminDashboard::createMedicationsTab()
 {

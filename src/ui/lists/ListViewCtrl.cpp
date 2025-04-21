@@ -1,7 +1,6 @@
 #include <ListViewCtrl.h>
 #include <EditRecordPanel.h>
 #include <ActionDialog.h>
-#include <RemoveRecordDialog.h>
 
 ListView::ListView(wxPanel *parent, wxWindowID id, const wxPoint &pos, const wxSize &size)
     : wxListCtrl(parent, id, pos, size, wxLC_REPORT | wxLC_VIRTUAL)
@@ -250,18 +249,3 @@ void ListView::OnItemActivated(wxListEvent &event)
 
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 };
-
-void ListView::removeRecord(wxCommandEvent &event)
-{
-
-    if (!this->apts.empty())
-    {
-        RemoveRecordDialog rrd(this->parent, this->apts[this->index]);
-        rrd.ShowModal();
-    }
-    else if (!this->users.empty())
-    {
-        RemoveRecordDialog rrd(this->parent, this->users[this->index]);
-        rrd.ShowModal();
-    }
-}

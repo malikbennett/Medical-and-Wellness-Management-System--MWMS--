@@ -26,6 +26,7 @@ User::User(User &data)
     this->attemptsRemaining = data.getAttemptsRemaining();
     this->isLocked = data.locked();
     this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, data.getRole().roleNumber);
+    this->ProfileRecords = data.getProfileRecords();
 }
 
 void User::setProfileRecords(vector<string> ProfileRecords){this->ProfileRecords = ProfileRecords;}

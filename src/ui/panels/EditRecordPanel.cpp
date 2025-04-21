@@ -256,7 +256,6 @@ void EditRecordPanel::OnSubmit(wxCommandEvent &event)
     }
 }
 
-
 int EditRecordPanel::getDoctorNumber()
 {
     string choice = this->doctorNumberChoice->GetStringSelection().ToStdString();

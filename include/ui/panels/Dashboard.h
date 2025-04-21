@@ -39,7 +39,6 @@ public:
     void buildUI() override;
     wxPanel *createManageStaffTab();
     wxPanel *createManagePatientsTab();
-    wxPanel *createAppointmentsTab();
     wxPanel *createMedicationsTab();
     wxPanel *createReportsTab();
 };
@@ -62,7 +61,6 @@ public:
     DoctorDashboard(wxPanel *parent);
     void buildUI() override;
     wxPanel* createMyPatientsTab();
-    wxPanel* createAppointmentsTab();
     wxPanel* createReferralsTab();
     wxPanel* createPrescriptionsTab();
 
@@ -74,7 +72,6 @@ public:
     NurseDashboard(wxPanel *parent);
     void buildUI() override;
     wxPanel* createPatientInfoTab();
-    wxPanel* createAppointmentsTab();
     wxPanel* createMedicationsTab();
 
 };

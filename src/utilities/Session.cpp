@@ -25,10 +25,7 @@ unsigned int Session::Login(string &username, string &password)
         if (currentUser)
         {
             delete currentUser;
-        }
-        if (unAuthUser)
-        {
-            delete unAuthUser;
+            currentUser = nullptr;
         }
         // Validate user input
         if (!UserManager::ValidateCredentials(username, password))

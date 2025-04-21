@@ -26,9 +26,8 @@ set(SOURCES
     src/ui/panels/ReceptionistDashboard.cpp
     src/ui/lists/ListViewCtrl.cpp
     src/ui/dialog/BookAppointmentDialog.cpp
-    src/ui/dialog/EditRecordPanel.cpp
+    src/ui/panels/EditRecordPanel.cpp
     src/ui/dialog/ActionDialog.cpp
-    src/ui/dialog/RemoveRecordDialog.cpp
 )
 
 set(INCLUDES

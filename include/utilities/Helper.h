@@ -22,7 +22,7 @@ inline void AddFormField(wxFlexGridSizer* sizer, wxWindow* parent, const wxStrin
     sizer->Add(ctrl, 1, wxEXPAND | wxALL, 5);
 }
 
-inline wxStaticText *AddText(wxPanel *panel, wxSizer *sizer, const wxString &label, const wxFont &font, int padding = 20)
+inline wxStaticText *AddText(wxWindow *panel, wxSizer *sizer, const wxString &label, const wxFont &font, int padding = 20)
 {
     wxStaticText *text = new wxStaticText(panel, wxID_ANY, label);
     text->SetFont(font);

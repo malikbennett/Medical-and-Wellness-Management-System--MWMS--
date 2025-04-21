@@ -39,7 +39,6 @@ void LoginPanel::buildUI()
     this->passwordField->SetHint("Enter password");
 
     this->loginBtn = new wxButton(this, wxID_OK, "Login");
-    this->loginBtn->SetBackgroundColour(Settings::getInstance().colors.primary);
     this->loginBtn->Bind(wxEVT_BUTTON, &LoginPanel::onLogin, this);
 
     loginSizer->Add(firstHeader, 1, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, margin);

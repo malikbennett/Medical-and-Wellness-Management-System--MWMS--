@@ -27,13 +27,6 @@ wxPanel *NurseDashboard::createPatientInfoTab()
     panel->SetSizer(sizer);
     return panel;
 };
-wxPanel *NurseDashboard::createAppointmentsTab()
-{
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetSizer(sizer);
-    return panel;
-};
 wxPanel *NurseDashboard::createMedicationsTab()
 {
     wxPanel *panel = new wxPanel(notebook);

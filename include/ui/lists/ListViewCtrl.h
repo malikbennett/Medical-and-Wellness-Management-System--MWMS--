@@ -34,6 +34,4 @@ private:
     wxPanel *parent;
     int index;
     void OnItemActivated(wxListEvent &event);
-    void editRecord(wxCommandEvent &event);
-    void removeRecord(wxCommandEvent &event);
 };
