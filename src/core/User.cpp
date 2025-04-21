@@ -29,8 +29,19 @@ User::User(User &data)
 }
 
 void User::setProfileRecords(vector<string> ProfileRecords){this->ProfileRecords = ProfileRecords;}
-void User::setAttemptsRemaining(int i) { this->attemptsRemaining = 1; };
-void User::toggleLock(){this->isLocked = !this->isLocked;}
+void User::setAttemptsRemaining(int i) { this->attemptsRemaining = i; };
+void User::setRole(Role role){this->jobRole = role;}
+void User::toggleLock(int i){
+    if(i == 1){
+        this->isLocked = true;
+    }else if (i == 0){
+        this->isLocked = false;
+    }
+    else if (i == -1)
+    {
+        this->isLocked = !this->isLocked;
+    }
+    }
 const int User::getUserNumber() const {return this->userNumber;}
 const string User::getUsername() const {return this->username;}
 const string User::getPassword() const {return this->password;}

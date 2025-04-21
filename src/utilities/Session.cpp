@@ -21,6 +21,15 @@ unsigned int Session::Login(string &username, string &password)
 {
     try
     {
+        // Delete previous session if exist
+        if (currentUser)
+        {
+            delete currentUser;
+        }
+        if (unAuthUser)
+        {
+            delete unAuthUser;
+        }
         // Validate user input
         if (!UserManager::ValidateCredentials(username, password))
             return 1;
@@ -48,11 +57,6 @@ unsigned int Session::Login(string &username, string &password)
             throw runtime_error(ss.str());
         }
         UserManager::LoadUserData(*unAuthUser);
-        // Delete previous session if exist
-        if (currentUser)
-        {
-            delete currentUser;
-        }
         // Check if user is employee or patient and Creates them
         currentUser = (stoi(userInfo[3]) == 7) ? static_cast<User *>(new Patient(*unAuthUser)) : static_cast<User *>(new Employee(*unAuthUser));
         // Error if user is not created successfully

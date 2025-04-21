@@ -3,16 +3,10 @@
 #include <User.h>
 #include <Helper.h>
 #include <Constants.h>
+#include <Status.h>
+#include <Date.h>
 
 using namespace std;
-
-// Defines Different Status States
-enum Status
-{
-    Completed,
-    Scheduled,
-    Cancelled
-};
 
 class Appointment
 {

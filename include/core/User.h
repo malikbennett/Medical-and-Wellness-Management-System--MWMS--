@@ -6,7 +6,6 @@
 #include <vector>
 
 using namespace std;
-struct User;
 
 // Base User Class
 class User
@@ -22,7 +21,8 @@ public:
     // Setters
     void setProfileRecords(vector<string> ProfileRecords);
     void setAttemptsRemaining(int i);
-    void toggleLock();
+    void toggleLock(int i = -1);
+    void setRole(Role role);
     // Getters
     // returns the user's userID
     const int getUserNumber() const;

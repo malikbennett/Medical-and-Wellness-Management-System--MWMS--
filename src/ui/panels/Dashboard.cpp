@@ -73,12 +73,12 @@ void Dashboard::OnBookAppointment(wxCommandEvent& event)
         string time = dlg.GetTimeSlot().ToStdString();
         if (pat)
         {
-            Appointment apt(pat->getPatientNumber(),doctorNumber,date,time ,Scheduled);
+            Appointment apt(pat->getPatientNumber(),doctorNumber,date,time ,Status::Scheduled);
             apt.saveAppointment();
         }
         else if (emp)
         {
-            Appointment apt(emp->getId(),doctorNumber,date,time ,Scheduled);
+            Appointment apt(emp->getId(),doctorNumber,date,time ,Status::Scheduled);
             apt.saveAppointment();
         }
         wxLogMessage("Booking: Doctor #%d on %s at %s",doctorNumber,dlg.GetDate().FormatISODate(),time);

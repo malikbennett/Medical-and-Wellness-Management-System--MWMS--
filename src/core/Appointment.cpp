@@ -1,8 +1,8 @@
 #include <Appointment.h>
-#include <string>
+#include <Helper.h>
 #include <sstream>
 #include <fstream>
-#include <Helper.h>
+#include <string>
 
 string Appointment::aptInfoPath = "../../data/Appointment.csv";
 
@@ -16,24 +16,12 @@ Appointment::Appointment(int patientNumber, int doctorNumber, Date appointmentDa
 };
 
 Appointment::Appointment(vector<string> aptData)
-    : patientNumber(stoi(aptData[1])), doctorNumber(stoi(aptData[2])), appointmentDate(aptData[3]), appointmentTime(aptData[4])
+    : appointmentNumber(stoi(aptData[0])), patientNumber(stoi(aptData[1])), doctorNumber(stoi(aptData[2])), appointmentDate(aptData[3]), appointmentTime(aptData[4])
 {
     this->colSize = getFileFields(aptInfoPath).size();
     this->totalWidth = APPOINTMENT_NUMBER_LENGTH + USER_NUMBER_LENGTH + USER_NUMBER_LENGTH + DATE_LENGTH + TIME_LENGTH + STATUS_LENGTH + colSize;
     this->fieldWidths = {APPOINTMENT_NUMBER_LENGTH, USER_NUMBER_LENGTH, USER_NUMBER_LENGTH, DATE_LENGTH, TIME_LENGTH, STATUS_LENGTH};
-    this->appointmentNumber = getNewAppointmentNumber();
-    if (aptData[5] == "Completed")
-    {
-        this->status = Completed;
-    }
-    else if (aptData[5] == "Scheduled")
-    {
-        this->status = Scheduled;
-    }
-    else
-    {
-        this->status = Cancelled;
-    }
+    this->status = stringToStatus(trimString(aptData[5]));
 };
 
 void Appointment::saveAppointment()
@@ -65,21 +53,13 @@ void Appointment::saveAppointment()
         }
 
         // Construct the new record
-        string status;
-        if (this->status == 0)
-            status = "Completed";
-        else if (this->status == 1)
-            status = "Scheduled";
-        else
-            status = "Cancelled";
-
         stringstream ss;
         ss << padString(to_string(this->appointmentNumber), APPOINTMENT_NUMBER_LENGTH)
            << ',' << padString(to_string(this->patientNumber), USER_NUMBER_LENGTH)
            << ',' << padString(to_string(this->doctorNumber), USER_NUMBER_LENGTH)
            << ',' << padString(Date::toString(this->appointmentDate), DATE_LENGTH)
            << ',' << padString(this->appointmentTime, TIME_LENGTH)
-           << ',' << padString(status, STATUS_LENGTH)
+           << ',' << padString(statusToString(this->status), STATUS_LENGTH)
            << ',';
 
         string record = ss.str();

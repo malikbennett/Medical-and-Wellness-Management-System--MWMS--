@@ -65,3 +65,4 @@ Role Role::LoadRoleFromFile(const string &filePath, int roleNumber)
     // Returns empty Role if role was not created successfully
     return Role();
 }
+

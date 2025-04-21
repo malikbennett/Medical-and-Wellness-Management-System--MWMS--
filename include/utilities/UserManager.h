@@ -16,19 +16,12 @@ public:
     static vector<User*> getAllUsers(int roleNumber = 0);
     // Validates user input before authent                                                                                                                                                      ication
     static bool ValidateCredentials(const string &username, const string &password);
-    // Locks an account after too many failed attempts
-    static void lockAccount(User &data);
-    // Unlocks an account (admin-only)
-    static void unlockAccount(User &data);
     // Increments failed login attempts
     static void decrementAttempts(User &data);
     // reset failed login attempts
     static void resetAttempts(User &data);
     // saves user data
     static void saveUserData(const User &data = *Session::GetCurrentUser());
-
-    // returns userData
-    static User *getData();
     // File path to the user information database
     static const string userInfoPath;
     static const string patientInfoPath;

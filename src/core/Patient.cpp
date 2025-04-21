@@ -1,5 +1,4 @@
 #include <Patient.h>
-#include <UserManager.h>
 #include <iostream>
 #include <string>
 

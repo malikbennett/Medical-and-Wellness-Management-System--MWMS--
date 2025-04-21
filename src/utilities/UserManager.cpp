@@ -1,11 +1,11 @@
 #include <UserManager.h>
-#include <User.h>
+#include <Constants.h>
+#include <Helper.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <wx/wx.h>
-#include <Helper.h>
-#include <Constants.h>
+#include <User.h>
 
 const string UserManager::userInfoPath = "../../data/UserInfo.csv";
 const string UserManager::patientInfoPath = "../../data/PatientInfo.csv";
@@ -42,7 +42,7 @@ void UserManager::LoadUserData(User &data)
                 continue;
             if (stoi(fields.at(0)) != data.getUserNumber())
                 continue;
-            if (data.getRole().roleNumber == 7) // Patient
+            if (data.getRole().roleLevel == "PATIENT") // Patient
             {
                 data.setProfileRecords(fields);
             }
@@ -62,6 +62,8 @@ void UserManager::LoadUserData(User &data)
 
 vector<string> UserManager::FindUserByUsername(const string &username)
 {
+    // Vectoe to store fields
+    vector<string> fields;
     try
     {
         // Opens User Info file
@@ -80,10 +82,10 @@ vector<string> UserManager::FindUserByUsername(const string &username)
         {
             // Initialize a stringstream to parse record into individual fields
             istringstream ss(line);
+            // Clear fields after each iteration
+            fields.clear();
             // Variable to store each field
             string token;
-            // Vectoe to store fields
-            vector<string> fields;
             // Split up and store each line into tokens
             while (getline(ss, token, ','))
             {
@@ -103,6 +105,7 @@ vector<string> UserManager::FindUserByUsername(const string &username)
     {
         std::cerr << e.what() << '\n';
     }
+    return fields;
 }
 
 // Gets all users and Profile Data
@@ -192,7 +195,9 @@ void UserManager::decrementAttempts(User &userData)
     }
     else
     {
-        userData.setAttemptsRemaining(userData.getAttemptsRemaining() - 1);
+        int rem = userData.getAttemptsRemaining();
+        rem--;
+        userData.setAttemptsRemaining(rem);
     }
     saveUserData(userData);
 };
@@ -208,10 +213,14 @@ void UserManager::saveUserData(const User &userData)
     try
     {
         // width of each field
-        const int fieldWidths[6] = {USER_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
+        const int userFieldWidths[6] = {USER_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
         int colSize = getFileFields(userInfoPath).size();
         // total line size + colSize(to account for ',')
-        const int totalWidth = USER_NUMBER_LENGTH + USERNAME_LENGTH + PASSWORD_LENGTH + ROLE_NUMBER_LENGTH + ATTEMPTS_REMAINING_LENGTH + ACCOUNT_LOCKED_LENGTH + colSize;
+        int userTotalWidth = colSize;
+        for (auto &field : userFieldWidths)
+        {
+            userTotalWidth += field;
+        }
         // Open User info File
         fstream file(userInfoPath, ios::in | ios::out | ios::binary);
         if (!file.is_open())
@@ -230,7 +239,7 @@ void UserManager::saveUserData(const User &userData)
         while (getline(file, line))
         {
             // Compare the first n amount (i.e USER_NUMBER) of char
-            if (stoi(line.substr(0, fieldWidths[0])) == userData.getUserNumber())
+            if (stoi(line.substr(0, userFieldWidths[0])) == userData.getUserNumber())
             {
                 found = true;
                 break;
@@ -238,27 +247,144 @@ void UserManager::saveUserData(const User &userData)
             ++lineNum;
         }
         stringstream ss;
-        ss << padString(to_string(userData.getUserNumber()), USER_NUMBER_LENGTH)
-           << ',' << padString(userData.getUsername(), USERNAME_LENGTH)
-           << ',' << padString(userData.getPassword(), PASSWORD_LENGTH)
-           << ',' << padString(to_string(userData.getRole().roleNumber), ROLE_NUMBER_LENGTH)
-           << ',' << padString(to_string(userData.getAttemptsRemaining()), ATTEMPTS_REMAINING_LENGTH)
-           << ',' << padString((userData.locked()) ? "1" : "0", ACCOUNT_LOCKED_LENGTH)
+        ss << padString(to_string(userData.getUserNumber()), userFieldWidths[0])
+           << ',' << padString(userData.getUsername(), userFieldWidths[1])
+           << ',' << padString(userData.getPassword(), userFieldWidths[2])
+           << ',' << padString(to_string(userData.getRole().roleNumber), userFieldWidths[3])
+           << ',' << padString(to_string(userData.getAttemptsRemaining()), userFieldWidths[4])
+           << ',' << padString((userData.locked()) ? "1" : "0", userFieldWidths[5])
            << ',';
         string record = ss.str();
-        if (record.length() != totalWidth)
+        if (record.length() != userTotalWidth)
         {
-            cerr << "Record length mismatch. Record is " << record.length() << ", expected " << totalWidth << endl;
+            cerr << "Record length mismatch. Record is " << record.length() << ", expected " << userTotalWidth << endl;
             file.close();
             return;
         }
-        if(found){
-            // Go to correct offset (start + lineNum * recordSize)
-            int recordSize = totalWidth + 1; // +1 for newline
-            file.seekp(start + lineNum * recordSize, ios::beg);
-            file << record << '\n'; // overwrite
+        if (found)
+        {
+            int recordSize = userTotalWidth + 1;
+            file.seekp(start + static_cast<streamoff>(lineNum * recordSize), ios::beg);
+            file << record << '\n';
         }
         file.close();
+        if(!userData.getProfileRecords().empty()){
+            // Saving Profile Records
+            vector<int> profileFieldWidths;
+            int profileTotalWidth;
+            int profileColSize;
+            stringstream profileSS;
+            string profileRecord;
+            if (userData.getRole().roleLevel == "PATIENT")
+            {
+                // width of each field
+                profileFieldWidths = {
+                    USER_NUMBER_LENGTH, USER_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH,
+                    TRN_LENGTH, DATE_LENGTH, DATE_LENGTH, GENDER_LENGTH, MARTIAL_STATUS_LENGTH, NOK_LENGTH,
+                    PHONE_NUMBER_LENGTH, MEDICAL_HISTORY_LENGTH, EMAIL_ADDRESS_LENGTH, PHONE_NUMBER_LENGTH, ADDRESS_LENGTH};
+                profileColSize = getFileFields(patientInfoPath).size();
+                // total line size + colSize(to account for ',')
+                profileTotalWidth = profileColSize;
+                for (auto &field : profileFieldWidths)
+                {
+                    profileTotalWidth += field;
+                }
+                file.open(patientInfoPath, ios::in | ios::out | ios::binary);
+                if (!file.is_open())
+                {
+                    // Returns an error is file did not open successfully
+                    throw runtime_error("User File Information Could not open");
+                }
+                getline(file, header); // Skip header
+                while (getline(file, line))
+                {
+                    // Compare the first n amount (i.e USER_NUMBER) of char
+                    if (stoi(line.substr(0, profileFieldWidths[0])) == userData.getProfileRecords()[0])
+                    {
+                        found = true;
+                        break;
+                    }
+                    ++lineNum;
+                }
+                profileSS << padString(userData.getProfileRecords()[0], profileFieldWidths[0])
+                          << ',' << padString(userData.getProfileRecords()[1], profileFieldWidths[1])
+                          << ',' << padString(userData.getProfileRecords()[2], profileFieldWidths[2])
+                          << ',' << padString(userData.getProfileRecords()[3], profileFieldWidths[3])
+                          << ',' << padString(userData.getProfileRecords()[4], profileFieldWidths[4])
+                          << ',' << padString(userData.getProfileRecords()[5], profileFieldWidths[5])
+                          << ',' << padString(userData.getProfileRecords()[6], profileFieldWidths[6])
+                          << ',' << padString(userData.getProfileRecords()[7], profileFieldWidths[7])
+                          << ',' << padString(userData.getProfileRecords()[8], profileFieldWidths[8])
+                          << ',' << padString(userData.getProfileRecords()[9], profileFieldWidths[9])
+                          << ',' << padString(userData.getProfileRecords()[10], profileFieldWidths[10])
+                          << ',' << padString(userData.getProfileRecords()[11], profileFieldWidths[11])
+                          << ',' << padString(userData.getProfileRecords()[12], profileFieldWidths[12])
+                          << ',' << padString(userData.getProfileRecords()[13], profileFieldWidths[13])
+                          << ',' << padString(userData.getProfileRecords()[14], profileFieldWidths[14])
+                          << ',' << padString(userData.getProfileRecords()[15], profileFieldWidths[15])
+                          << ',';
+                profileRecord = profileSS.str();
+            }
+            else
+            {
+                profileFieldWidths = {
+                    USER_NUMBER_LENGTH, USER_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH,
+                    DATE_LENGTH, DATE_LENGTH, DEPARTMENT_LENGTH, GENDER_LENGTH,
+                    TRN_LENGTH, JOB_TITLE_LENGTH, NAME_LENGTH
+                };
+                profileColSize = getFileFields(employeeInfoPath).size();
+                profileTotalWidth = profileColSize;
+                for (auto &field : profileFieldWidths)
+                {
+                    profileTotalWidth += field;
+                }
+                file.open(employeeInfoPath, ios::in | ios::out | ios::binary);
+                if (!file.is_open())
+                {
+                    // Returns an error is file did not open successfully
+                    throw runtime_error("User File Information Could not open");
+                }
+                getline(file, header); // Skip header
+                while (getline(file, line))
+                {
+                    // Compare the first n amount (i.e USER_NUMBER) of char
+                    if (stoi(line.substr(0, profileFieldWidths[0])) == userData.getProfileRecords()[0])
+                    {
+                        found = true;
+                        break;
+                    }
+                    ++lineNum;
+                }
+                profileSS << padString(userData.getProfileRecords()[0], profileFieldWidths[0])
+                          << ',' << padString(userData.getProfileRecords()[1], profileFieldWidths[1])
+                          << ',' << padString(userData.getProfileRecords()[2], profileFieldWidths[2])
+                          << ',' << padString(userData.getProfileRecords()[3], profileFieldWidths[3])
+                          << ',' << padString(userData.getProfileRecords()[4], profileFieldWidths[4])
+                          << ',' << padString(userData.getProfileRecords()[5], profileFieldWidths[5])
+                          << ',' << padString(userData.getProfileRecords()[6], profileFieldWidths[6])
+                          << ',' << padString(userData.getProfileRecords()[7], profileFieldWidths[7])
+                          << ',' << padString(userData.getProfileRecords()[8], profileFieldWidths[8])
+                          << ',' << padString(userData.getProfileRecords()[9], profileFieldWidths[9])
+                          << ',' << padString(userData.getProfileRecords()[10], profileFieldWidths[10])
+                          << ',' << padString(userData.getProfileRecords()[11], profileFieldWidths[11])
+                          << ',';
+                profileRecord = profileSS.str();
+            }
+            if (profileRecord.length() != profileTotalWidth)
+            {
+                cerr << "Record length mismatch. Record is " << profileRecord.length() << ", expected " << profileTotalWidth << endl;
+                file.close();
+                return;
+            }
+            if (found)
+            {
+                // Go to correct offset (start + lineNum * recordSize)
+                int recordSize = profileTotalWidth + 1; // +1 for newline
+                file.seekp(start + static_cast<streamoff>(lineNum * recordSize), ios::beg);
+                file << profileRecord << '\n'; // overwrite
+            }
+            file.close();
+        }
     }
     catch (const std::exception &e)
     {

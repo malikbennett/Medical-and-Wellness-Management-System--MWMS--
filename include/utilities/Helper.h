@@ -5,90 +5,26 @@
 #include <fstream>
 #include <vector>
 
+#include <Appointment.h>
+
 using namespace std;
 
-// PhoneNumber class
-class Phone
+inline void DefaultChoice(wxChoice *&choice,const string &value){
+    int index = choice->FindString(value);
+    if (index != wxNOT_FOUND)
+        choice->Select(index);
+}
+
+inline void AddFormField(wxFlexGridSizer* sizer, wxWindow* parent, const wxString& label, wxTextCtrl*& ctrl, const wxString& defaultValue = "")
 {
-public:
-    Phone(int areaCode, int exchange, int lineNumber)
-        : areaCode(areaCode), exchange(exchange), lineNumber(lineNumber) {};
-    Phone() {};
-    static Phone toPhone(const string &phone)
-    {
-        string areaCode, exchange, lineNumber;
-        istringstream phoneStream(phone);
-        getline(phoneStream, areaCode, '-');
-        getline(phoneStream, exchange, '-');
-        getline(phoneStream, lineNumber, '-');
-        return Phone(stoi(areaCode), stoi(exchange), stoi(lineNumber));
-    }
+    sizer->Add(new wxStaticText(parent, wxID_ANY, label), 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+    ctrl = new wxTextCtrl(parent, wxID_ANY, defaultValue);
+    sizer->Add(ctrl, 1, wxEXPAND | wxALL, 5);
+}
 
-private:
-    int areaCode;
-    int exchange;
-    int lineNumber;
-};
-// Address Class
-class Address
+inline wxStaticText *AddText(wxPanel *panel, wxSizer *sizer, const wxString &label, const wxFont &font, int padding = 20)
 {
-public:
-    Address(int streetNumber, string streetName, string parish, string country)
-        : streetNumber(streetNumber), streetName(streetName),
-        parish(parish), country(country) {};
-    Address() {};
-    static Address toAddress(const string &address)
-    {
-        string streetNumber, streetName, parish, country;
-        istringstream addressStream(address);
-        getline(addressStream, streetNumber, '-');
-        getline(addressStream, streetName, '-');
-        getline(addressStream, parish, '-');
-        getline(addressStream, country, '-');
-        return Address(stoi(streetNumber), streetName, parish, country);
-    }
-
-private:
-    int streetNumber;
-    string streetName;
-    string parish;
-    string country;
-};
-// Date structure
-struct Date
-{
-    string day;
-    string month;
-    string year;
-    Date(string day, string month, string year)
-        : day(day), month(month), year(year) {};
-    Date(string dateStr){
-        istringstream ssDate(dateStr);
-        getline(ssDate, this->year, '-');
-        getline(ssDate, this->month, '-');
-        getline(ssDate, this->day, '-');
-    };
-    Date() {};
-    static Date toDate(const string &date)
-    {
-        istringstream ssDate(date);
-        string year, month, day;
-        getline(ssDate, year, '-');
-        getline(ssDate, month, '-');
-        getline(ssDate, day, '-');
-        return Date(day, month, year);
-    }
-    static string toString(const Date &date)
-    {
-        stringstream ssDate;
-        ssDate << date.year << "-" << date.month << "-" << date.day;
-        return ssDate.str();
-    }
-};
-
-
-inline wxStaticText* AddText(wxPanel* panel, wxSizer* sizer, const wxString& label, const wxFont& font, int padding = 20) {
-    wxStaticText* text = new wxStaticText(panel, wxID_ANY, label);
+    wxStaticText *text = new wxStaticText(panel, wxID_ANY, label);
     text->SetFont(font);
     sizer->Add(text, 0, wxALIGN_LEFT | wxALL, padding);
     return text;

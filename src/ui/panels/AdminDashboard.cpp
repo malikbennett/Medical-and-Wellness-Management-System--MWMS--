@@ -93,8 +93,10 @@ wxPanel *AdminDashboard::createAppointmentsTab()
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
     AddText(panel, sizer, "Appointment Management:", this->headingFont, 10);
-    // TODO: Calendar view or appointment list
-
+    ListView *records = new ListView(panel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
+    records->loadAppointmentsFields();
+    records->RefreshAfterUpdate();
+    sizer->Add(records,1,wxEXPAND);
     panel->SetSizer(sizer);
     return panel;
 }

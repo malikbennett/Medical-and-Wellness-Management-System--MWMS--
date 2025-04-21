@@ -3,8 +3,9 @@
 #include <User.h>
 #include <string>
 #include <Helper.h>
-
-struct PatientProfile;
+#include <Date.h>
+#include <Address.h>
+#include <Phone.h>
 
 // Patient Class
 class Patient : public User

@@ -6,7 +6,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(SOURCES
     src/App.cpp
-    src/Settings.cpp
     src/core/User.cpp
     src/core/Patient.cpp
     src/core/Employee.cpp
@@ -25,7 +24,11 @@ set(SOURCES
     src/ui/panels/PatientDashboard.cpp
     src/ui/panels/PsychologistDashboard.cpp
     src/ui/panels/ReceptionistDashboard.cpp
+    src/ui/lists/ListViewCtrl.cpp
     src/ui/dialog/BookAppointmentDialog.cpp
+    src/ui/dialog/EditRecordPanel.cpp
+    src/ui/dialog/ActionDialog.cpp
+    src/ui/dialog/RemoveRecordDialog.cpp
 )
 
 set(INCLUDES
