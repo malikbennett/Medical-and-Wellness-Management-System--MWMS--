@@ -13,7 +13,7 @@ struct Role{
     // level of the roles permission
     string roleLevel;
     // File path to the role information database
-    static string userRolePath;
+    const static string userRolePath;
     // Constructors
     Role() = default;
     Role(const Role&) = default;

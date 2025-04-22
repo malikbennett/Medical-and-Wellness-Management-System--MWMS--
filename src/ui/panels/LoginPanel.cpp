@@ -1,9 +1,9 @@
-#include <DashboardPanel.h>
-#include <RenderText.h>
+#include <HomePanel.h>
 #include <LoginPanel.h>
 #include <MainFrame.h>
 #include <Settings.h>
 #include <Session.h>
+#include <Helper.h>
 #include <Role.h>
 
 LoginPanel::LoginPanel(wxPanel *parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(325, 350))
@@ -14,41 +14,36 @@ LoginPanel::LoginPanel(wxPanel *parent) : wxPanel(parent, wxID_ANY, wxDefaultPos
 
 void LoginPanel::buildUI()
 {
-    this->SetBackgroundColour(Settings::getInstance().colors.surface);
-
     const int margin = 20;
+
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     // Create the sizer that will arrange items vertically
     wxBoxSizer *loginSizer = new wxBoxSizer(wxVERTICAL);
-    this->SetSizer(loginSizer);
 
     wxStaticText *firstHeader = new wxStaticText(this, wxID_ANY, "Welcome Back",wxDefaultPosition,wxDefaultSize,wxALIGN_CENTER);
     firstHeader->SetFont(wxFont(18, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     wxStaticText *subText = new wxStaticText(this, wxID_ANY, "Enter your credential to access your account.", wxDefaultPosition,wxDefaultSize,wxALIGN_CENTER);
     subText->SetFont(wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-    subText->SetForegroundColour(Settings::getInstance().colors.textSecondaryDark);
+    subText->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     subText->Wrap(300);
 
     this->usernameField = new wxTextCtrl(this, wxID_ANY, "");
-    this->usernameField->SetBackgroundColour(Settings::getInstance().colors.textSecondaryLight);
-    this->usernameField->SetForegroundColour(Settings::getInstance().colors.textPrimary);
     this->usernameField->SetHint("Enter username");
 
     this->passwordField = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
-    this->passwordField->SetBackgroundColour(Settings::getInstance().colors.textSecondaryLight);
-    this->passwordField->SetForegroundColour(Settings::getInstance().colors.textPrimary);
     this->passwordField->SetHint("Enter password");
 
     this->loginBtn = new wxButton(this, wxID_OK, "Login");
-    this->loginBtn->SetBackgroundColour(Settings::getInstance().colors.primary);
     this->loginBtn->Bind(wxEVT_BUTTON, &LoginPanel::onLogin, this);
 
-    loginSizer->Add(firstHeader, 0, wxEXPAND | wxALL, margin);
-    loginSizer->Add(subText, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    loginSizer->Add(usernameField, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    loginSizer->Add(passwordField, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
-    loginSizer->Add(loginBtn, 0, wxEXPAND | wxALL, margin);
+    loginSizer->Add(firstHeader, 1, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(subText, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(usernameField, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(passwordField, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, margin);
+    loginSizer->Add(loginBtn, 1, wxEXPAND | wxALL, margin);
 
+    this->SetSizer(loginSizer);
     loginSizer->Layout();
 }
 

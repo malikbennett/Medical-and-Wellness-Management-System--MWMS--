@@ -12,13 +12,9 @@ public:
 private:
     wxPanel *parent;
     wxPanel *loginPanel;
-    wxBoxSizer *imageSizer;
-    wxBoxSizer *mainSizer;
     wxBoxSizer *loginSizer;
     wxTextCtrl *usernameField;
     wxTextCtrl *passwordField;
-    wxChoice *roleOptions;
     wxButton *loginBtn;
     void onLogin(wxCommandEvent &event);
-    void hide();
 };

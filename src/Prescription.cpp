@@ -1,11 +1,12 @@
-
 #include "core/Prescription.h"
 #include <fstream>        
 #include <iostream>    
 
+
 void Prescription::approve() {
     isApproved = true;
 }
+
 
 
 bool Prescription::getApprovalStatus() const {
@@ -42,3 +43,8 @@ void Prescription::loadFromFile(std::ifstream& in) {
        >> prescriptionDate.year >> comma
        >> isApproved;
 }
+
+bool Prescription::getApprovalStatus() const {
+    return isApproved;
+}
+

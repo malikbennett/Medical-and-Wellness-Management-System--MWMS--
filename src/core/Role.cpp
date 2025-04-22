@@ -4,7 +4,7 @@
 #include <sstream>
 #include <vector>
 
-string Role::userRolePath = "../../data/UserRoles.csv";
+const string Role::userRolePath = "../../data/UserRoles.csv";
 
 Role::Role(int rNumber, const string &rName, const string &rLevel)
     : roleNumber(rNumber), roleName(rName), roleLevel(rLevel) {};
@@ -65,3 +65,4 @@ Role Role::LoadRoleFromFile(const string &filePath, int roleNumber)
     // Returns empty Role if role was not created successfully
     return Role();
 }
+

@@ -1,30 +1,55 @@
 // User class implementation
-
+#include <UserManager.h>
 #include <User.h>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <Helper.h>
 
 User::User(int userNumber, const string &username,const string& password, Role role)
-    : jobRole(role)
+    : jobRole(role), username(username), password(password)
 {
     setUserNumber(userNumber);
-    this->username = username;
-    this->password = password;
 }
 
-const int User::getUserNumber() const
+User::User(vector<string> UserData): userNumber(stoi(UserData[0])), username(UserData[1]),
+password(UserData[2]), attemptsRemaining(stoi(UserData[4])) ,isLocked((UserData[5] == "1")){
+    this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, stoi(UserData[3]));
+};
+
+User::User(User &data)
 {
-    return this->userNumber;
+    setUserNumber(data.getUserNumber());
+    this->username = trimString(data.getUsername());
+    this->password = trimString(data.getPassword());
+    this->attemptsRemaining = data.getAttemptsRemaining();
+    this->isLocked = data.locked();
+    this->jobRole = Role::LoadRoleFromFile(Role::userRolePath, data.getRole().roleNumber);
+    this->ProfileRecords = data.getProfileRecords();
 }
-const string User::getUserName() const
-{
-    return this->username;
-}
-const Role& User::getRole() const
-{
-    return this->jobRole;
-}
+
+void User::setProfileRecords(vector<string> ProfileRecords){this->ProfileRecords = ProfileRecords;}
+void User::setAttemptsRemaining(int i) { this->attemptsRemaining = i; };
+void User::setRole(Role role){this->jobRole = role;}
+void User::toggleLock(int i){
+    if(i == 1){
+        this->isLocked = true;
+    }else if (i == 0){
+        this->isLocked = false;
+    }
+    else if (i == -1)
+    {
+        this->isLocked = !this->isLocked;
+    }
+    }
+const int User::getUserNumber() const {return this->userNumber;}
+const string User::getUsername() const {return this->username;}
+const string User::getPassword() const {return this->password;}
+const bool User::locked() const {return this->isLocked;}
+const int User::getAttemptsRemaining() const {return this->attemptsRemaining;}
+const vector<string> &User::getProfileRecords() const {return this->ProfileRecords;}
+const Role& User::getRole() const {return this->jobRole;}
 
 void User::setUserNumber(int userNumber)
 {

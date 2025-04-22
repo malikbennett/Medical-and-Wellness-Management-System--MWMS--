@@ -1,29 +1,7 @@
 #pragma once
 #include <wx/wx.h>
+#include <Constants.h>
 using namespace std;
-
-struct ColorPalette {
-    wxColor background;
-    wxColor surface;
-    wxColor surfaceLight;
-
-    wxColor primary;
-    wxColor primaryDark;
-
-    wxColor secondary;
-    wxColor secondaryDark;
-
-    wxColor textPrimaryLight;
-    wxColor textPrimary;
-    wxColor textPrimaryDark;
-
-    wxColor textSecondaryLight;
-    wxColor textSecondary;
-    wxColor textSecondaryDark;
-
-    wxColor error;
-};
-
 /*
 Singleton class for program settings that can be access throughout codebase for things like
 the window Size, Position, and other stuff
@@ -45,8 +23,8 @@ public:
 
   // Constant Settings Data ; these cannot be changed elsewhere
   const string windowTitle = "MWMS";
-  const int windowWidth = 1280;
-  const int windowHeight = 720;
+  const int windowWidth = 5 * 160;
+  const int windowHeight = 4 * 160;
   ColorPalette colors;
 
 private:
@@ -60,7 +38,6 @@ private:
 
   ColorPalette GetColorPalette() {
     ColorPalette palette;
-
     if (!isDarkMode()) {
         palette.background = wxColor(235, 235, 235);
         palette.surface = wxColor(245, 245, 245);

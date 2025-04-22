@@ -1,33 +1,32 @@
 #pragma once
 
 #include <User.h>
+#include <string>
+#include <Helper.h>
+#include <Date.h>
+#include <Address.h>
+#include <Phone.h>
 
-// PhoneNumber class
-class Phone
-{
-private:
-    int areaCode;
-    int exchange;
-    int lineNumber;
-};
-// Address Class
-class Address
-{
-private:
-    int streetNumber;
-    string streetName;
-    string parish;
-    string country;
-};
 // Patient Class
-class Patient : public User{
+class Patient : public User
+{
 public:
+    Patient(User &data);
+    // Getters
+    int getPatientNumber() const;
+    string getPatientFirstName() const;
+    string getPatientMiddleName() const;
+    string getPatientLastName() const;
+    string getPatientGender() const;
+    Date getPatientDOB() const;
+    Phone getPhoneNumber() const;
+    Address getPatientAddress() const;
 
 private:
-    int patientNumber;
-    string patientName;
-    string patientGender;
-    Date patientDOB;
-    Phone phoneNumber;
+    int patientNumber, trn;
+    string patientfirstName,patientmiddleName,patientlastName,patientGender;
+    string medicalHistory, emailAddress, martialStatus, nextOfKin;
+    Date patientDOB, firstVisit;
+    Phone phoneNumber, nextOfKinContact;
     Address patientAddress;
 };

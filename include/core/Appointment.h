@@ -1,20 +1,44 @@
 #pragma once
 
 #include <User.h>
+#include <Helper.h>
+#include <Constants.h>
+#include <Status.h>
+#include <Date.h>
 
-// Defines Different Status States
-enum Status
+using namespace std;
+
+class Appointment
 {
-    Completed,
-    Scheduled,
-    Cancelled
-};
+public:
+    Appointment(int patientNumber,int doctorNumber,Date appointmentDate,string time,Status status);
+    Appointment(vector<string> aptData);
+    void saveAppointment();
+    // Getters and Setters
+    static vector<Appointment *> getAllApt();
+    int getNewAppointmentNumber();
+    int getAppointmentNumber();
+    int getPatientNumber();
+    int getDoctorNumber();
+    Date getAppointmentDate();
+    string getAppointmentTime();
+    Status getStatus();
+    void setAppointmentNumber(int aptn);
+    void setPatientNumber(int pn);
+    void setDoctorNumber(int dn);
+    void setAppointmentDate(Date d);
+    void setAppointmentTime(const string& t);
+    void setStatus(Status s);
+    static string aptInfoPath;
 
-class Appointment{
 private:
     int appointmentNumber;
     int patientNumber;
     int doctorNumber;
     Date appointmentDate;
+    string appointmentTime;
     Status status;
+    int colSize;
+    vector<int> fieldWidths;
+    int totalWidth;
 };
