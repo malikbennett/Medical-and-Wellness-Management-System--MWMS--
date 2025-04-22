@@ -3,17 +3,51 @@
 #include <Helper.h>
 
 BookAppointmentDialog::BookAppointmentDialog(wxWindow *parent)
-    : wxDialog(parent, wxID_ANY, "Book Appointment", wxDefaultPosition, wxSize(240, 360))
+    : wxDialog(parent, wxID_ANY, "Book Appointment", wxDefaultPosition, wxSize(320, 400))
 {
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    // Gets all doctors
-    vector<User *> users = UserManager::getAllUsers(2);
-    wxArrayString doctors;
-    for (auto &user : users)
+
+    if (Session::GetCurrentUser()->getRole().roleLevel != "PATIENT")
     {
-        doctors.Add("Dr." + trimString(user->getProfileRecords()[4]) + "(" + trimString(user->getProfileRecords()[1]) + ")");
+        vector<User *> users = UserManager::getAllUsers(7);
+        wxArrayString patients;
+        for (auto &user : users)
+        {
+            wxString name = trimString(user->getProfileRecords()[4]);
+            wxString id = trimString(user->getProfileRecords()[1]);
+            wxString title;
+            if(user->getProfileRecords()[8] == "M")
+                title = "Mr. ";
+            else
+                title = "Ms. ";
+            patients.Add(title + name + "(" + id + ")");
+        }
+        patientNumberCtrl = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, patients);
+        sizer->Add(new wxStaticText(this, wxID_ANY, "Patient Number:"), 0, wxALL, 5);
+        sizer->Add(patientNumberCtrl, 0, wxTOP | wxEXPAND, 20);
     }
-    doctorNumberCtrl = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, doctors);
+
+    // Gets all Medical Proffessionals
+    vector<User *> users;
+    wxArrayString medProf;
+
+    auto addProfessionals = [&](int roleLevel, const wxString& title) {
+        users = UserManager::getAllUsers(roleLevel);
+        for (auto &user : users)
+        {
+            wxString name = trimString(user->getProfileRecords()[4]);
+            wxString id = trimString(user->getProfileRecords()[1]);
+            medProf.Add(title + " " + name + " (" + id + ")");
+        }
+        users.clear();
+    };
+
+    addProfessionals(2, "Dr.");
+    addProfessionals(3, "Psych.");
+    addProfessionals(4, "Diet.");
+
+    medProfNumberCtrl = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, medProf);
+
     dateCtrl = new wxDatePickerCtrl(this, wxID_ANY);
     wxArrayString times;
     times.Add("09:00 AM");
@@ -23,8 +57,8 @@ BookAppointmentDialog::BookAppointmentDialog(wxWindow *parent)
     times.Add("02:00 PM");
     timeSlotCtrl = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, times);
 
-    sizer->Add(new wxStaticText(this, wxID_ANY, "Doctor Number:"), 0, wxALL, 5);
-    sizer->Add(doctorNumberCtrl, 0, wxTOP | wxEXPAND, 20);
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Medical Prof. Number:"), 0, wxALL, 5);
+    sizer->Add(medProfNumberCtrl, 0, wxTOP | wxEXPAND, 20);
 
     sizer->Add(new wxStaticText(this, wxID_ANY, "Date:"), 0, wxALL, 5);
     sizer->Add(dateCtrl, 0, wxALL | wxEXPAND, 5);
@@ -41,9 +75,9 @@ BookAppointmentDialog::BookAppointmentDialog(wxWindow *parent)
     SetSizer(sizer);
 }
 
-int BookAppointmentDialog::GetDoctorNumber() const
+int BookAppointmentDialog::GetNumber(wxChoice* Ctrl)
 {
-    string choice = this->doctorNumberCtrl->GetStringSelection().ToStdString();
+    string choice = Ctrl->GetStringSelection().ToStdString();
 
     size_t start = choice.find('(');
     size_t end = choice.find(')');
@@ -54,6 +88,14 @@ int BookAppointmentDialog::GetDoctorNumber() const
         return stoi(numberStr);
     }
     return 0;
+}
+
+wxChoice *BookAppointmentDialog::GetPatientCtrl() const{
+    return this->patientNumberCtrl;
+}
+
+wxChoice *BookAppointmentDialog::GetMedProfCtrl() const{
+    return this->medProfNumberCtrl;
 }
 
 wxDateTime BookAppointmentDialog::GetDate() const
@@ -68,7 +110,10 @@ wxString BookAppointmentDialog::GetTimeSlot() const
 
 void BookAppointmentDialog::OnSubmit(wxCommandEvent &event)
 {
-    if (!doctorNumberCtrl->GetSelection() || !timeSlotCtrl->GetSelection())
+    int medProfIndex = medProfNumberCtrl->GetSelection();
+    int timeSlotIndex = timeSlotCtrl->GetSelection();
+
+    if (medProfIndex != wxNOT_FOUND && timeSlotIndex != wxNOT_FOUND)
     {
         EndModal(wxID_OK);
     }

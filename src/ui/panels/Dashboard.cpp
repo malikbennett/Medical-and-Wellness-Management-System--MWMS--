@@ -117,7 +117,7 @@ wxPanel *Dashboard::createAppointmentsTab()
 
     wxPanel *bottomPanel = new wxPanel(panel);
     wxBoxSizer *bottomSizer = new wxBoxSizer(wxVERTICAL);
-    ListView *list = new ListView(bottomPanel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
+    this->list = new ListView(bottomPanel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
     list->loadAppointmentsFields();
     list->RefreshAfterUpdate();
     bottomSizer->Add(list, 1, wxEXPAND);
@@ -130,6 +130,65 @@ wxPanel *Dashboard::createAppointmentsTab()
     return panel;
 };
 
+wxPanel* Dashboard::createPrescriptionsTab(){
+    wxPanel *panel = new wxPanel(notebook);
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    // Header
+    wxPanel *headerPanel = new wxPanel(panel);
+    wxBoxSizer *headerSizer = new wxBoxSizer(wxHORIZONTAL);
+    AddText(headerPanel, headerSizer, "Prescriptions:", this->headingFont, 10);
+
+    // Body
+    wxPanel *bodyPanel = new wxPanel(panel);
+    wxBoxSizer *bodySizer = new wxBoxSizer(wxVERTICAL);
+    bodyPanel->SetBackgroundColour(Settings::getInstance().colors.surface);
+
+    ListView *records = new ListView(bodyPanel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
+    records->loadPrescriptionFields();
+    records->RefreshAfterUpdate();
+
+    bodySizer->Add(records, 1, wxEXPAND);
+
+    sizer->Add(headerPanel, 0, wxEXPAND);
+    sizer->Add(bodyPanel, 1, wxEXPAND);
+
+    bodyPanel->SetSizer(bodySizer);
+    headerPanel->SetSizer(headerSizer);
+    panel->SetSizer(sizer);
+    return panel;
+};
+
+wxPanel *Dashboard::createManagePatientsTab()
+{
+    wxPanel *panel = new wxPanel(notebook);
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    // Header
+    wxPanel *headerPanel = new wxPanel(panel);
+    wxBoxSizer *headerSizer = new wxBoxSizer(wxHORIZONTAL);
+    AddText(headerPanel, headerSizer, "Patients Records:", this->headingFont, 10);
+
+    // Body
+    wxPanel *bodyPanel = new wxPanel(panel);
+    wxBoxSizer *bodySizer = new wxBoxSizer(wxVERTICAL);
+
+    ListView *records = new ListView(bodyPanel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
+    records->loadPatientFields();
+    records->RefreshAfterUpdate();
+
+    bodySizer->Add(records, 1, wxEXPAND);
+    // Example: Add table/list view here for employees
+
+    sizer->Add(headerPanel, 0, wxEXPAND);
+    sizer->Add(bodyPanel, 1, wxEXPAND);
+
+
+    bodyPanel->SetSizer(bodySizer);
+    headerPanel->SetSizer(headerSizer);
+    panel->SetSizer(sizer);
+    return panel;
+}
+
+
 void Dashboard::OnBookAppointment(wxCommandEvent& event)
 {
     BookAppointmentDialog dlg(this);
@@ -138,28 +197,21 @@ void Dashboard::OnBookAppointment(wxCommandEvent& event)
         const User *user = Session::GetCurrentUser();
         const Employee *emp = dynamic_cast<const Employee *>(user);
         const Patient *pat = dynamic_cast<const Patient *>(user);
-        int doctorNumber = dlg.GetDoctorNumber();
+        int medProfNumber = BookAppointmentDialog::GetNumber(dlg.GetMedProfCtrl());
+        int patientNumber = BookAppointmentDialog::GetNumber(dlg.GetPatientCtrl());
         Date date(dlg.GetDate().Format("%Y-%m-%d").ToStdString());
         string time = dlg.GetTimeSlot().ToStdString();
         if (pat)
         {
-            Appointment apt(pat->getPatientNumber(),doctorNumber,date,time ,Status::Scheduled);
+            Appointment apt(pat->getPatientNumber(),medProfNumber,date,time ,Status::Scheduled);
             apt.saveAppointment();
         }
         else if (emp)
         {
-            Appointment apt(emp->getId(),doctorNumber,date,time ,Status::Scheduled);
+            Appointment apt(patientNumber,medProfNumber,date,time ,Status::Scheduled);
             apt.saveAppointment();
         }
-        wxLogMessage("Booking: Doctor #%d on %s at %s",doctorNumber,dlg.GetDate().FormatISODate(),time);
+        list->RefreshAfterUpdate();
+        wxLogMessage("Booking: Doctor #%d on %s at %s",medProfNumber,dlg.GetDate().FormatISODate(),time);
     }
 }
-
-wxPanel *Dashboard::createMyPatientsTab() {
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    AddText(panel, sizer, "My Patients:", this->headingFont, 10);
-    AddText(panel, sizer, "Work in progress...", this->paraFont, 10);
-    panel->SetSizer(sizer);
-    return panel;
-};

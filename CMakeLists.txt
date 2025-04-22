@@ -11,6 +11,7 @@ set(SOURCES
     src/core/Employee.cpp
     src/core/Role.cpp
     src/core/Appointment.cpp
+    src/core/Prescription.cpp
     src/utilities/Session.cpp
     src/utilities/UserManager.cpp
     src/ui/MainFrame.cpp

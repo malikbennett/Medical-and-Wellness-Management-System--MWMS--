@@ -2,7 +2,7 @@
 #include <ActionDialog.h>
 #include <Helper.h>
 
-ActionDialog::ActionDialog(wxPanel *parent, Appointment *apt, User *user)
+ActionDialog::ActionDialog(wxPanel *parent, Appointment *apt, User *user, Prescription* pres)
     : wxDialog(parent, wxID_ANY, "Select Action", wxDefaultPosition, wxSize(400, 300)), apt(apt), user(user)
 {
     sizer = new wxBoxSizer(wxVERTICAL);
@@ -13,6 +13,9 @@ ActionDialog::ActionDialog(wxPanel *parent, Appointment *apt, User *user)
         removePanel = new wxPanel(this);
     }else if(user != nullptr){
         editPanel = new EditRecordPanel(this,user,EDIT_USER);
+        removePanel = new wxPanel(this);
+    }else if(pres != nullptr){
+        editPanel = new EditRecordPanel(this,pres,EDIT_PRESCRIPTION);
         removePanel = new wxPanel(this);
     }
 

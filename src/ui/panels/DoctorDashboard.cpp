@@ -12,10 +12,9 @@ void DoctorDashboard::buildUI()
     this->SetSizer(sizer);
 
     notebook->AddPage(createHomeTab(), "Home");
-    notebook->AddPage(createMyPatientsTab(), "My Patients");
     notebook->AddPage(createAppointmentsTab(), "Appointments");
-    notebook->AddPage(createReferralsTab(), "Referrals");
     notebook->AddPage(createPrescriptionsTab(), "Prescriptions");
+    notebook->AddPage(createReferralsTab(), "Referrals");
 
     // Add to Main Sizer
     sizer->Add(this->notebook, 1, wxEXPAND | wxALL);
@@ -24,12 +23,8 @@ wxPanel *DoctorDashboard::createReferralsTab()
 {
     wxPanel *panel = new wxPanel(notebook);
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetSizer(sizer);
-    return panel;
-};
-wxPanel* DoctorDashboard::createPrescriptionsTab(){
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    AddText(panel, sizer, "Referrals:", this->headingFont, 10);
+    AddText(panel, sizer, "Work in progress.....", this->paraFont, 10);
     panel->SetSizer(sizer);
     return panel;
 };

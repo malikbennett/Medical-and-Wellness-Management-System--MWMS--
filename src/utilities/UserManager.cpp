@@ -193,7 +193,7 @@ int  UserManager::getNewUserNumber()
     try
     {
         // width of each field
-        const int userFieldWidths[6] = {USER_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
+        const int userFieldWidths[6] = {ID_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
         int colSize = getFileFields(userInfoPath).size();
         // total line size + colSize(to account for ',')
         int userTotalWidth = colSize;
@@ -247,7 +247,7 @@ int  UserManager::getNewPatientNumber()
     {
         // width of each field
         const int patientFieldWidths[16] = {
-            USER_NUMBER_LENGTH, USER_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH, TRN_LENGTH,
+            ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH, TRN_LENGTH,
             DATE_LENGTH, DATE_LENGTH, GENDER_LENGTH, MARTIAL_STATUS_LENGTH, NOK_LENGTH, PHONE_NUMBER_LENGTH,
             MEDICAL_HISTORY_LENGTH, EMAIL_ADDRESS_LENGTH, PHONE_NUMBER_LENGTH, ADDRESS_LENGTH};
         int colSize = getFileFields(patientInfoPath).size();
@@ -346,7 +346,7 @@ void UserManager::saveUserData(const User &userData)
     try
     {
         // width of each field
-        const int userFieldWidths[6] = {USER_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
+        const int userFieldWidths[6] = {ID_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
         int colSize = getFileFields(userInfoPath).size();
         // total line size + colSize(to account for ',')
         int userTotalWidth = colSize;
@@ -417,7 +417,7 @@ void UserManager::saveUserData(const User &userData)
             {
                 // width of each field
                 profileFieldWidths = {
-                    USER_NUMBER_LENGTH, USER_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH,
+                    ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH,
                     TRN_LENGTH, DATE_LENGTH, DATE_LENGTH, GENDER_LENGTH, MARTIAL_STATUS_LENGTH, NOK_LENGTH,
                     PHONE_NUMBER_LENGTH, MEDICAL_HISTORY_LENGTH, EMAIL_ADDRESS_LENGTH, PHONE_NUMBER_LENGTH, ADDRESS_LENGTH};
                 profileColSize = getFileFields(patientInfoPath).size();
@@ -466,7 +466,7 @@ void UserManager::saveUserData(const User &userData)
             else
             {
                 profileFieldWidths = {
-                    USER_NUMBER_LENGTH, USER_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH,
+                    ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH,
                     DATE_LENGTH, DATE_LENGTH, DEPARTMENT_LENGTH, GENDER_LENGTH,
                     TRN_LENGTH, JOB_TITLE_LENGTH, NAME_LENGTH
                 };

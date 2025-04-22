@@ -9,6 +9,7 @@
 #include <wx/wx.h>
 #include <wx/listctrl.h>
 #include <Appointment.h>
+#include <Prescription.h>
 #include <Employee.h>
 #include <Patient.h>
 
@@ -21,6 +22,7 @@ public:
     void loadEmployeeFields();
     void loadPatientFields();
     void loadAppointmentsFields();
+    void loadPrescriptionFields();
     virtual wxString OnGetItemText(long index, long column) const override;
     void RefreshAfterUpdate();
 
@@ -29,8 +31,10 @@ private:
     vector<string> empfields;
     vector<string> patfields;
     vector<string> aptfields;
+    vector<string> presfields;
     vector<User *> users;
     vector<Appointment *> apts;
+    vector<Prescription *> pres;
     wxPanel *parent;
     int index;
     void OnItemActivated(wxListEvent &event);

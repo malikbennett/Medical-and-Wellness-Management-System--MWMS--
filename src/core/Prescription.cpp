@@ -1,34 +1,40 @@
-#include <Appointment.h>
+#include <Prescription.h>
 #include <Helper.h>
 #include <sstream>
 #include <fstream>
 #include <string>
 
-string Appointment::aptInfoPath = "../../data/Appointment.csv";
+string Prescription::presInfoPath = "../../data/Prescription.csv";
 
-Appointment::Appointment(int patientNumber, int doctorNumber, Date appointmentDate, string time, Status status)
-    : patientNumber(patientNumber), doctorNumber(doctorNumber), appointmentDate(appointmentDate), appointmentTime(time), status(status)
+Prescription::Prescription(int prescriptionNumber,int patientNumber,int doctorNumber, Date prescriptionDate, string medication, double dosage)
+    : patientNumber(patientNumber), doctorNumber(doctorNumber), prescriptionDate(prescriptionDate), medication(medication), dosage(dosage)
 {
-    this->colSize = getFileFields(aptInfoPath).size();
-    this->totalWidth = ID_NUMBER_LENGTH + ID_NUMBER_LENGTH + ID_NUMBER_LENGTH + DATE_LENGTH + TIME_LENGTH + STATUS_LENGTH + colSize;
-    this->fieldWidths = {ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, DATE_LENGTH, TIME_LENGTH, STATUS_LENGTH};
-    this->appointmentNumber = getNewAppointmentNumber();
+    this->colSize = getFileFields(presInfoPath).size();
+    this->totalWidth = colSize;
+    this->fieldWidths = {ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, DATE_LENGTH, MEDICATION_LENGTH,DOSAGE_LENGTH};
+    for(auto &field : fieldWidths){
+        totalWidth += field;
+    }
+    this->prescriptionNumber = getNewPrescriptionNumber();
 };
 
-Appointment::Appointment(vector<string> aptData)
-    : appointmentNumber(stoi(aptData[0])), patientNumber(stoi(aptData[1])), doctorNumber(stoi(aptData[2])), appointmentDate(aptData[3]), appointmentTime(aptData[4])
+Prescription::Prescription(vector<string> presData)
+    : prescriptionNumber(stoi(presData[0])), patientNumber(stoi(presData[1])), doctorNumber(stoi(presData[2])), prescriptionDate(presData[3]),
+    medication(presData[4]), dosage(stod(presData[5]))
 {
-    this->colSize = getFileFields(aptInfoPath).size();
-    this->totalWidth = ID_NUMBER_LENGTH + ID_NUMBER_LENGTH + ID_NUMBER_LENGTH + DATE_LENGTH + TIME_LENGTH + STATUS_LENGTH + colSize;
-    this->fieldWidths = {ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, DATE_LENGTH, TIME_LENGTH, STATUS_LENGTH};
-    this->status = stringToStatus(trimString(aptData[5]));
+    this->colSize = getFileFields(presInfoPath).size();
+    this->totalWidth = colSize;
+    this->fieldWidths = {ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, ID_NUMBER_LENGTH, DATE_LENGTH, MEDICATION_LENGTH,DOSAGE_LENGTH};
+    for(auto &field : fieldWidths){
+        totalWidth += field;
+    }
 };
 
-void Appointment::saveAppointment()
+void Prescription::savePrescription()
 {
     try
     {
-        fstream file(aptInfoPath, ios::in | ios::out | ios::binary);
+        fstream file(presInfoPath, ios::in | ios::out | ios::binary);
         if (!file.is_open())
             throw runtime_error("User File Information Could not open");
 
@@ -44,7 +50,7 @@ void Appointment::saveAppointment()
         while (getline(file, line))
         {
             string substr = trimString(line.substr(0, fieldWidths[0]));
-            if (stoi(substr) == this->appointmentNumber)
+            if (stoi(substr) == this->prescriptionNumber)
             {
                 found = true;
                 break;
@@ -54,12 +60,12 @@ void Appointment::saveAppointment()
 
         // Construct the new record
         stringstream ss;
-        ss << padString(to_string(this->appointmentNumber), ID_NUMBER_LENGTH)
+        ss << padString(to_string(this->prescriptionNumber), ID_NUMBER_LENGTH)
            << ',' << padString(to_string(this->patientNumber), ID_NUMBER_LENGTH)
            << ',' << padString(to_string(this->doctorNumber), ID_NUMBER_LENGTH)
-           << ',' << padString(Date::toString(this->appointmentDate), DATE_LENGTH)
-           << ',' << padString(this->appointmentTime, TIME_LENGTH)
-           << ',' << padString(statusToString(this->status), STATUS_LENGTH)
+           << ',' << padString(Date::toString(this->prescriptionDate), DATE_LENGTH)
+           << ',' << padString(this->medication, MEDICATION_LENGTH)
+           << ',' << padString(to_string(this->dosage), DOSAGE_LENGTH)
            << ',';
 
         string record = ss.str();
@@ -95,15 +101,15 @@ void Appointment::saveAppointment()
     }
 }
 
-vector<Appointment *> Appointment::getAllApt()
+vector<Prescription *> Prescription::getAllPres()
 {
-    vector<Appointment *> apts;
+    vector<Prescription *> apts;
     try
     {
-        ifstream file(aptInfoPath);
+        ifstream file(presInfoPath);
         if (!file.is_open())
         {
-            throw runtime_error("Appointment file failed to open");
+            throw runtime_error("Prescription file failed to open");
         }
         string header;
         getline(file, header);
@@ -122,7 +128,7 @@ vector<Appointment *> Appointment::getAllApt()
                 std::cerr << "Skipping invalid row: " << line << std::endl;
                 continue;
             }
-            Appointment *apt = new Appointment(fields);
+            Prescription *apt = new Prescription(fields);
             apts.push_back(apt);
         }
         std::cout << "Total appointments loaded: " << apts.size() << std::endl;
@@ -134,13 +140,13 @@ vector<Appointment *> Appointment::getAllApt()
     return apts;
 }
 
-int Appointment::getNewAppointmentNumber()
+int Prescription::getNewPrescriptionNumber()
 {
     try
     {
-        ifstream file(aptInfoPath, ios::in | ios::binary);
+        ifstream file(presInfoPath, ios::in | ios::binary);
         if (!file.is_open())
-            throw runtime_error("Appointment file failed to open");
+            throw runtime_error("Prescription file failed to open");
 
         string header;
         getline(file, header); // Skip variable-length header line
@@ -167,8 +173,8 @@ int Appointment::getNewAppointmentNumber()
         file.close();
 
         // Extract and return appointment number
-        string aptNumStr = trimString(lastLine.substr(0, fieldWidths[0]));
-        int i = stoi(aptNumStr) + 1;
+        string presNumStr = trimString(lastLine.substr(0, fieldWidths[0]));
+        int i = stoi(presNumStr) + 1;
         return i;
     }
     catch (const exception &e)
@@ -178,15 +184,15 @@ int Appointment::getNewAppointmentNumber()
     }
 }
 
-int Appointment::getAppointmentNumber() { return this->appointmentNumber; }
-int Appointment::getPatientNumber() { return this->patientNumber; }
-int Appointment::getDoctorNumber() { return this->doctorNumber; }
-Date Appointment::getAppointmentDate() { return this->appointmentDate; }
-string Appointment::getAppointmentTime() { return this->appointmentTime; }
-Status Appointment::getStatus() { return this->status; }
-void Appointment::setAppointmentNumber(int aptn) { this->appointmentNumber = aptn; }
-void Appointment::setPatientNumber(int pn) { this->patientNumber = pn; }
-void Appointment::setDoctorNumber(int dn) { this->doctorNumber = dn; }
-void Appointment::setAppointmentDate(Date d) { this->appointmentDate = d; }
-void Appointment::setAppointmentTime(const string &t) { this->appointmentTime = t; }
-void Appointment::setStatus(Status s) { this->status = s; }
+int Prescription::getPrescriptionNumber() { return this->prescriptionNumber; }
+int Prescription::getPatientNumber() { return this->patientNumber; }
+int Prescription::getDoctorNumber() { return this->doctorNumber; }
+Date Prescription::getPrescriptionDate() { return this->prescriptionDate; }
+string Prescription::getMedication() { return this->medication; }
+double Prescription::getDosage() { return this->dosage; }
+void Prescription::setPrescriptionNumber(int aptn) { this->prescriptionNumber = aptn; }
+void Prescription::setPatientNumber(int pn) { this->patientNumber = pn; }
+void Prescription::setDoctorNumber(int dn) { this->doctorNumber = dn; }
+void Prescription::setPrescriptionDate(Date d) { this->prescriptionDate = d; }
+void Prescription::setDosage(double d) { this->dosage = d; }
+void Prescription::setMedication(const string &m) { this->medication = m; }

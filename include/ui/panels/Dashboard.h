@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <wx/notebook.h>
+#include <ListViewCtrl.h>
 
 /* ---------------- Base Dashboard ---------------- */
 class Dashboard : public wxPanel
@@ -12,14 +13,13 @@ public:
     wxPanel *createHomeTab();
     wxPanel *createManageStaffTab();
     wxPanel *createManagePatientsTab();
+    wxPanel *createPrescriptionsTab();
     wxPanel *createAppointmentsTab();
-    wxPanel *createMedicationsTab();
     wxPanel *createReportsTab();
-    wxPanel *createMyPatientsTab();
     wxPanel *createReferralsTab();
-
 private:
     wxPanel *parent;
+    ListView *list;
 
     void OnBookAppointment(wxCommandEvent &event);
 
@@ -37,8 +37,6 @@ public:
     AdminDashboard(wxPanel *parent);
     void buildUI() override;
     wxPanel *createManageStaffTab();
-    wxPanel *createManagePatientsTab();
-    wxPanel *createMedicationsTab();
     wxPanel *createReportsTab();
 };
 /* ---------------- Dietitian Dashboard ---------------- */
@@ -57,8 +55,6 @@ public:
     DoctorDashboard(wxPanel *parent);
     void buildUI() override;
     wxPanel* createReferralsTab();
-    wxPanel* createPrescriptionsTab();
-
 };
 /* ---------------- Nurse Dashboard ---------------- */
 class NurseDashboard : public Dashboard
@@ -67,7 +63,6 @@ public:
     NurseDashboard(wxPanel *parent);
     void buildUI() override;
     wxPanel* createPatientInfoTab();
-    wxPanel* createMedicationsTab();
 
 };
 /* ---------------- Patient Dashboard ---------------- */
@@ -85,7 +80,6 @@ class PsychologistDashboard : public Dashboard
 public:
     PsychologistDashboard(wxPanel *parent);
     void buildUI() override;
-    wxPanel* createMyPatientsTab();
     wxPanel* createSessionNotesTab();
     wxPanel* createReferralsTab();
 
@@ -96,6 +90,5 @@ class ReceptionistDashboard : public Dashboard
 public:
     ReceptionistDashboard(wxPanel *parent);
     void buildUI() override;
-    wxPanel* createPatientRegistryTab();
     wxPanel* createVisitorLogTab();
 };

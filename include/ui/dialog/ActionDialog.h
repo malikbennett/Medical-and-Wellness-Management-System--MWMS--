@@ -7,10 +7,11 @@
 
 class ActionDialog : public wxDialog {
 public:
-    ActionDialog(wxPanel *parent, Appointment *apt, User *user);
+    ActionDialog(wxPanel *parent, Appointment *apt, User *user,Prescription* pres);
 
 private:
     Appointment* apt;
+    Prescription* pres;
     User* user;
     EditRecordPanel* editPanel;
     wxPanel* removePanel;

@@ -3,11 +3,13 @@
 #include <wx/wx.h>
 #include <User.h>
 #include <Appointment.h>
+#include <Prescription.h>
 #include <UserManager.h>
 #include <wx/datectrl.h>
 #include <wx/dateevt.h>
 
 enum EditMode {
+    EDIT_PRESCRIPTION,
     EDIT_APPOINTMENT,
     EDIT_USER
 };
@@ -17,8 +19,10 @@ class EditRecordPanel : public wxPanel
 public:
     EditRecordPanel(wxDialog *parent, User *user, EditMode mode);
     EditRecordPanel(wxDialog *parent, Appointment *apt, EditMode mode);
+    EditRecordPanel(wxDialog *parent, Prescription *pres, EditMode mode);
 
-    int getDoctorNumber();
+    static int GetNumber(wxChoice* Ctrl);
+    wxChoice *GetMedProfChoice() const;
 
 private:
     EditMode mode;
@@ -53,7 +57,11 @@ private:
     wxDatePickerCtrl* dateCtrl;
     wxChoice* timeChoice;
     wxChoice* statusChoice;
-    wxChoice *doctorNumberChoice;
+    wxChoice *medProfNumberChoice;
+
+    Prescription *pres;
+    wxTextCtrl *medicationCtrl;
+    wxTextCtrl *dosageCtrl;
 
     void OnSubmit(wxCommandEvent &event);
 };

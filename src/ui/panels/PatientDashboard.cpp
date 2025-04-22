@@ -24,7 +24,7 @@ wxPanel *PatientDashboard::createMedicalHistoryTab()
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
     AddText(panel, sizer, "Medication History:", this->headingFont, 10);
-    AddText(panel, sizer, "Work in progress.....:", this->paraFont, 10);
+    AddText(panel, sizer, "Work in progress.....", this->paraFont, 10);
 
     panel->SetSizer(sizer);
     return panel;

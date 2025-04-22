@@ -30,7 +30,7 @@ constexpr int BASIC_LENGTH_16 = 16;
 constexpr int BASIC_LENGTH_32 = 32;
 constexpr int BASIC_LENGTH_64 = 64;
 
-constexpr int USER_NUMBER_LENGTH = 5;
+constexpr int ID_NUMBER_LENGTH = 5;
 constexpr int USERNAME_LENGTH = BASIC_LENGTH_16;
 constexpr int PASSWORD_LENGTH = BASIC_LENGTH_64;
 constexpr int ROLE_NUMBER_LENGTH = 2;
@@ -52,6 +52,9 @@ constexpr int ADDRESS_LENGTH = BASIC_LENGTH_64;
 constexpr int DEPARTMENT_LENGTH = BASIC_LENGTH_16;
 constexpr int JOB_TITLE_LENGTH = BASIC_LENGTH_16;
 
-constexpr int APPOINTMENT_NUMBER_LENGTH = 5;   // e.g. 00001
-constexpr int TIME_LENGTH = 8;   // e.g. 00012
-constexpr int STATUS_LENGTH = BASIC_LENGTH_10;  // e.g. "Scheduled", "Completed", "Cancelled"
+constexpr int APPOINTMENT_NUMBER_LENGTH = 5;
+constexpr int TIME_LENGTH = 8;
+constexpr int STATUS_LENGTH = BASIC_LENGTH_10;
+
+constexpr int MEDICATION_LENGTH = BASIC_LENGTH_32;
+constexpr int DOSAGE_LENGTH = 6;

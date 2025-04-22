@@ -18,7 +18,6 @@ void AdminDashboard::buildUI()
     notebook->AddPage(createManageStaffTab(), "Manage Staff");
     notebook->AddPage(createManagePatientsTab(), "Manage Patients");
     notebook->AddPage(createAppointmentsTab(), "Appointments");
-    notebook->AddPage(createMedicationsTab(), "Medications");
     notebook->AddPage(createReportsTab(), "Reports");
 
     // Add to Main Sizer
@@ -45,58 +44,12 @@ wxPanel *AdminDashboard::createManageStaffTab()
     records->RefreshAfterUpdate();
 
     bodySizer->Add(records, 1, wxEXPAND);
-    // Example: Add table/list view here for employees
 
     sizer->Add(headerPanel, 0, wxEXPAND);
     sizer->Add(bodyPanel, 1, wxEXPAND);
 
     bodyPanel->SetSizer(bodySizer);
     headerPanel->SetSizer(headerSizer);
-    panel->SetSizer(sizer);
-    return panel;
-}
-
-wxPanel *AdminDashboard::createManagePatientsTab()
-{
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    // Header
-    wxPanel *headerPanel = new wxPanel(panel);
-    wxBoxSizer *headerSizer = new wxBoxSizer(wxHORIZONTAL);
-    AddText(headerPanel, headerSizer, "Patients Records:", this->headingFont, 10);
-
-    // Body
-    wxPanel *bodyPanel = new wxPanel(panel);
-    wxBoxSizer *bodySizer = new wxBoxSizer(wxVERTICAL);
-    bodyPanel->SetBackgroundColour(Settings::getInstance().colors.surface);
-
-    ListView *records = new ListView(bodyPanel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
-    records->loadPatientFields();
-    records->RefreshAfterUpdate();
-
-    bodySizer->Add(records, 1, wxEXPAND);
-    // Example: Add table/list view here for employees
-
-    sizer->Add(headerPanel, 0, wxEXPAND);
-    sizer->Add(bodyPanel, 1, wxEXPAND);
-
-
-    bodyPanel->SetSizer(bodySizer);
-    headerPanel->SetSizer(headerSizer);
-    panel->SetSizer(sizer);
-    return panel;
-}
-
-wxPanel *AdminDashboard::createMedicationsTab()
-{
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-
-    AddText(panel, sizer, "Medication Inventory:", this->headingFont, 10);
-    // TODO: Medication table + stock tracking
-    ListView *list = new ListView(panel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
-    // list->RefreshAfterUpdate();
-
     panel->SetSizer(sizer);
     return panel;
 }

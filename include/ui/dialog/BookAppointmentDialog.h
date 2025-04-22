@@ -8,12 +8,15 @@ class BookAppointmentDialog : public wxDialog {
 public:
     BookAppointmentDialog(wxWindow* parent);
 
-    int GetDoctorNumber() const;
+    static int GetNumber(wxChoice* Ctrl);
     wxDateTime GetDate() const;
     wxString GetTimeSlot() const;
+    wxChoice *GetPatientCtrl() const;
+    wxChoice *GetMedProfCtrl() const;
 
 private:
-    wxChoice* doctorNumberCtrl;
+    wxChoice* patientNumberCtrl;
+    wxChoice* medProfNumberCtrl;
     wxDatePickerCtrl* dateCtrl;
     wxChoice* timeSlotCtrl;
 

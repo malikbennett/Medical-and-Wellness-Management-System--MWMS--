@@ -138,13 +138,25 @@ EditRecordPanel::EditRecordPanel(wxDialog *parent, Appointment *apt, EditMode mo
     this->apt = apt;
     wxDateTime wxDate;
     wxDate.ParseISODate(Date::toString(apt->getAppointmentDate()));
-    vector<User *> users = UserManager::getAllUsers(2);
-    wxArrayString doctors;
-    for (auto &user : users)
-    {
-        doctors.Add("Dr." + trimString(user->getProfileRecords()[4]) + "(" + trimString(user->getProfileRecords()[1]) + ")");
-    }
-    doctorNumberChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, doctors);
+    // Gets all Medical Proffessionals
+    vector<User *> users;
+    wxArrayString medProf;
+
+    auto addProfessionals = [&](int roleLevel, const wxString& title) {
+        users = UserManager::getAllUsers(roleLevel);
+        for (auto &user : users)
+        {
+            wxString name = trimString(user->getProfileRecords()[4]);
+            wxString id = trimString(user->getProfileRecords()[1]);
+            medProf.Add(title + " " + name + " (" + id + ")");
+        }
+        users.clear();
+    };
+
+    addProfessionals(2, "Dr.");
+    addProfessionals(3, "Psych.");
+    addProfessionals(4, "Diet.");
+    medProfNumberChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, medProf);
     dateCtrl = new wxDatePickerCtrl(this, wxID_ANY, wxDate);
 
     wxArrayString times;
@@ -154,25 +166,76 @@ EditRecordPanel::EditRecordPanel(wxDialog *parent, Appointment *apt, EditMode mo
     times.Add("01:00 PM");
     times.Add("02:00 PM");
     timeChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, times);
-    doctorNumberChoice->SetStringSelection(to_string(apt->getDoctorNumber()));
+    medProfNumberChoice->SetStringSelection(to_string(apt->getDoctorNumber()));
     timeChoice->SetStringSelection(apt->getAppointmentTime());
 
     sizer->Add(new wxStaticText(this, wxID_ANY, "Doctor:"), 0, wxALL, 5);
-    sizer->Add(doctorNumberChoice, 0, wxALL | wxEXPAND, 5);
+    sizer->Add(medProfNumberChoice, 0, wxALL | wxEXPAND, 5);
     sizer->Add(new wxStaticText(this, wxID_ANY, "Date:"), 0, wxALL, 5);
     sizer->Add(dateCtrl, 0, wxALL | wxEXPAND, 5);
     sizer->Add(new wxStaticText(this, wxID_ANY, "Time:"), 0, wxALL, 5);
     sizer->Add(timeChoice, 0, wxALL | wxEXPAND, 5);
+    statusChoice = new wxChoice(this, wxID_ANY);
+    statusChoice->Append(statusToString(Status::Scheduled));
     if (Session::GetCurrentUser()->getRole().roleLevel != "PATIENT")
     {
-        statusChoice = new wxChoice(this, wxID_ANY);
-        statusChoice->Append(statusToString(Status::Scheduled));
         statusChoice->Append(statusToString(Status::Completed));
-        statusChoice->Append(statusToString(Status::Canceled));
-        statusChoice->SetStringSelection(statusToString(apt->getStatus()));
-        sizer->Add(new wxStaticText(this, wxID_ANY, "Status:"), 0, wxALL, 5);
-        sizer->Add(statusChoice, 0, wxALL | wxEXPAND, 5);
     }
+    statusChoice->Append(statusToString(Status::Canceled));
+    statusChoice->SetStringSelection(statusToString(apt->getStatus()));
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Status:"), 0, wxALL, 5);
+    sizer->Add(statusChoice, 0, wxALL | wxEXPAND, 5);
+    wxBoxSizer *btnSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxButton *okBtn = new wxButton(this, wxID_ANY, "Confirm");
+    okBtn->Bind(wxEVT_BUTTON, &EditRecordPanel::OnSubmit, this);
+    btnSizer->Add(okBtn, 0, wxALL, 5);
+    sizer->Add(btnSizer, 0, wxALIGN_CENTER | wxALL, 10);
+
+    SetSizerAndFit(sizer);
+    Hide();
+}
+
+EditRecordPanel::EditRecordPanel(wxDialog *parent, Prescription *pres, EditMode mode)
+    : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(300, 400))
+{
+    this->mode = mode;
+
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    this->pres = pres;
+    wxDateTime wxDate;
+    wxDate.ParseISODate(Date::toString(pres->getPrescriptionDate()));
+    // Gets all Medical Proffessionals
+    vector<User *> users;
+    wxArrayString medProf;
+
+    auto addProfessionals = [&](int roleLevel, const wxString& title) {
+        users = UserManager::getAllUsers(roleLevel);
+        for (auto &user : users)
+        {
+            wxString name = trimString(user->getProfileRecords()[4]);
+            wxString id = trimString(user->getProfileRecords()[1]);
+            medProf.Add(title + " " + name + " (" + id + ")");
+        }
+        users.clear();
+    };
+
+    addProfessionals(2, "Dr.");
+    addProfessionals(3, "Psych.");
+    addProfessionals(4, "Diet.");
+    medProfNumberChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, medProf);
+    dateCtrl = new wxDatePickerCtrl(this, wxID_ANY, wxDate);
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Doctor:"), 0, wxALL, 5);
+    sizer->Add(medProfNumberChoice, 0, wxALL | wxEXPAND, 5);
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Date:"), 0, wxALL, 5);
+    sizer->Add(dateCtrl, 0, wxALL | wxEXPAND, 5);
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Medication:"), 0, wxALL, 5);
+    medicationCtrl = new wxTextCtrl(this, wxID_ANY,pres->getMedication());
+    sizer->Add(medicationCtrl, 0, wxALL | wxEXPAND, 5);
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Dosage:"), 0, wxALL, 5);
+    dosageCtrl = new wxTextCtrl(this, wxID_ANY, to_string(pres->getDosage()));
+    sizer->Add(dosageCtrl, 0, wxALL | wxEXPAND, 5);
+
     wxBoxSizer *btnSizer = new wxBoxSizer(wxHORIZONTAL);
     wxButton *okBtn = new wxButton(this, wxID_ANY, "Confirm");
     okBtn->Bind(wxEVT_BUTTON, &EditRecordPanel::OnSubmit, this);
@@ -187,20 +250,16 @@ void EditRecordPanel::OnSubmit(wxCommandEvent &event)
 {
     if (this->mode == EDIT_APPOINTMENT)
     {
-        if (doctorNumberChoice->GetSelection() == wxNOT_FOUND ||
+        if (medProfNumberChoice->GetSelection() == wxNOT_FOUND ||
             timeChoice->GetSelection() == wxNOT_FOUND)
         {
             wxMessageBox("Please fill in all fields.", "Error", wxOK | wxICON_ERROR);
             return;
         }
-        apt->setDoctorNumber(getDoctorNumber());
+        apt->setDoctorNumber(EditRecordPanel::GetNumber(this->medProfNumberChoice));
         apt->setAppointmentDate(Date::toDate(dateCtrl->GetValue().FormatISODate().ToStdString()));
         apt->setAppointmentTime(timeChoice->GetStringSelection().ToStdString());
-
-        if (Session::GetCurrentUser()->getRole().roleLevel != "PATIENT")
-        {
-            apt->setStatus(stringToStatus(statusChoice->GetStringSelection().ToStdString()));
-        }
+        apt->setStatus(stringToStatus(statusChoice->GetStringSelection().ToStdString()));
         apt->saveAppointment();
     }
     if(this->mode == EDIT_USER){
@@ -247,6 +306,18 @@ void EditRecordPanel::OnSubmit(wxCommandEvent &event)
         }
         user->setProfileRecords(record);
         UserManager::saveUserData(*user);
+    } else if(this->mode == EDIT_PRESCRIPTION){
+        if (medProfNumberChoice->GetSelection() == wxNOT_FOUND ||
+            medicationCtrl->GetValue().IsEmpty())
+        {
+            wxMessageBox("Please fill in all fields.", "Error", wxOK | wxICON_ERROR);
+            return;
+        }
+        pres->setDoctorNumber(EditRecordPanel::GetNumber(this->medProfNumberChoice));
+        pres->setPrescriptionDate(Date::toDate(dateCtrl->GetValue().FormatISODate().ToStdString()));
+        pres->setMedication(medicationCtrl->GetValue().ToStdString());
+        pres->setDosage(stod(dosageCtrl->GetValue().ToStdString()));
+        pres->savePrescription();
     }
     // Close the parent dialog manually if needed
     wxDialog* dialog = dynamic_cast<wxDialog*>(GetParent());
@@ -256,9 +327,9 @@ void EditRecordPanel::OnSubmit(wxCommandEvent &event)
     }
 }
 
-int EditRecordPanel::getDoctorNumber()
+int EditRecordPanel::GetNumber(wxChoice* Ctrl)
 {
-    string choice = this->doctorNumberChoice->GetStringSelection().ToStdString();
+    string choice = Ctrl->GetStringSelection().ToStdString();
 
     size_t start = choice.find('(');
     size_t end = choice.find(')');
@@ -269,4 +340,7 @@ int EditRecordPanel::getDoctorNumber()
         return stoi(numberStr);
     }
     return 0;
+}
+wxChoice *EditRecordPanel::GetMedProfChoice() const{
+    return this->medProfNumberChoice;
 }
