@@ -2,7 +2,7 @@
     "version": 8,
     "configurePresets": [
         {
-            "name": "linux-default",
+            "name": "linux-debug",
             "displayName": "debug",
             "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
             "generator": "Unix Makefiles",
@@ -17,9 +17,9 @@
             }
         },
         {
-            "name": "linux-default",
+            "name": "linux-release",
             "displayName": "release",
-            "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
+            "description": "",
             "generator": "Unix Makefiles",
             "binaryDir": "${sourceDir}/build/release",
             "cacheVariables": {
@@ -32,7 +32,7 @@
             }
         },
         {
-            "name": "windows-default",
+            "name": "windows-debug",
             "displayName": "debug",
             "description": "Build using MinGW-w64",
             "generator": "MinGW Makefiles",
@@ -45,7 +45,7 @@
             }
         },
         {
-            "name": "windows-default",
+            "name": "windows-release",
             "displayName": "release",
             "description": "Build using MinGW-w64",
             "generator": "MinGW Makefiles",

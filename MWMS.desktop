@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MWMS
+Exec=/home/malik/Projects/c++/UTECH/Medical-and-Wellness-Management-System--MWMS--/build/release/MWMS
+Icon=/home/malik/Projects/c++/UTECH/Medical-and-Wellness-Management-System--MWMS--/Assets/icon.png
+Terminal=false
+Categories=Utility;
