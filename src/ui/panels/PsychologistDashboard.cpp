@@ -27,13 +27,6 @@ wxPanel *PsychologistDashboard::createMyPatientsTab()
     panel->SetSizer(sizer);
     return panel;
 };
-wxPanel *PsychologistDashboard::createAppointmentsTab()
-{
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetSizer(sizer);
-    return panel;
-};
 wxPanel *PsychologistDashboard::createSessionNotesTab()
 {
     wxPanel *panel = new wxPanel(notebook);

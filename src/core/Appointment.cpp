@@ -76,7 +76,7 @@ void Appointment::saveAppointment()
         {
             // Go to correct offset (start + lineNum * recordSize)
             int recordSize = totalWidth + 1; // +1 for newline
-            file.seekp(start + lineNum * recordSize, ios::beg);
+            file.seekp(start + static_cast<streamoff>(lineNum * recordSize), ios::beg);
             file << record << '\n'; // overwrite
         }
         else
@@ -134,7 +134,6 @@ vector<Appointment *> Appointment::getAllApt()
     return apts;
 }
 
-
 int Appointment::getNewAppointmentNumber()
 {
     try
@@ -161,7 +160,7 @@ int Appointment::getNewAppointmentNumber()
         int totalRecords = dataSize / recordSize;
 
         // Go to the last record
-        file.seekg(start + (totalRecords - 1) * recordSize, ios::beg);
+        file.seekg(start + static_cast<streamoff>((totalRecords - 1) * recordSize), ios::beg);
 
         string lastLine(recordSize, '\0');
         file.read(&lastLine[0], recordSize);

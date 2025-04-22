@@ -9,8 +9,9 @@ BookAppointmentDialog::BookAppointmentDialog(wxWindow *parent)
     // Gets all doctors
     vector<User *> users = UserManager::getAllUsers(2);
     wxArrayString doctors;
-    for (auto &user : users){
-        doctors.Add(user->getProfileRecords()[1]);
+    for (auto &user : users)
+    {
+        doctors.Add("Dr." + trimString(user->getProfileRecords()[4]) + "(" + trimString(user->getProfileRecords()[1]) + ")");
     }
     doctorNumberCtrl = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, doctors);
     dateCtrl = new wxDatePickerCtrl(this, wxID_ANY);
@@ -42,8 +43,17 @@ BookAppointmentDialog::BookAppointmentDialog(wxWindow *parent)
 
 int BookAppointmentDialog::GetDoctorNumber() const
 {
-    string i = trimString(doctorNumberCtrl->GetStringSelection().ToStdString());
-    return stoi(i);
+    string choice = this->doctorNumberCtrl->GetStringSelection().ToStdString();
+
+    size_t start = choice.find('(');
+    size_t end = choice.find(')');
+
+    if (start != string::npos && end != string::npos && end > start)
+    {
+        string numberStr = choice.substr(start + 1, end - start - 1);
+        return stoi(numberStr);
+    }
+    return 0;
 }
 
 wxDateTime BookAppointmentDialog::GetDate() const

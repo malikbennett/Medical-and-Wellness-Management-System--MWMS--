@@ -26,13 +26,6 @@ wxPanel *ReceptionistDashboard::createPatientRegistryTab()
     panel->SetSizer(sizer);
     return panel;
 };
-wxPanel *ReceptionistDashboard::createAppointmentsTab()
-{
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetSizer(sizer);
-    return panel;
-};
 wxPanel *ReceptionistDashboard::createVisitorLogTab()
 {
     wxPanel *panel = new wxPanel(notebook);

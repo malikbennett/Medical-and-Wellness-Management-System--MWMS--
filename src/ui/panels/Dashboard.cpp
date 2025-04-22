@@ -105,7 +105,6 @@ wxPanel *Dashboard::createAppointmentsTab()
     wxPanel *panel = new wxPanel(notebook);
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
-
     wxPanel *topPanel = new wxPanel(panel);
     wxBoxSizer *topSizer = new wxBoxSizer(wxHORIZONTAL);
     AddText(topPanel, topSizer, "Appointments:", this->headingFont);
@@ -155,3 +154,12 @@ void Dashboard::OnBookAppointment(wxCommandEvent& event)
         wxLogMessage("Booking: Doctor #%d on %s at %s",doctorNumber,dlg.GetDate().FormatISODate(),time);
     }
 }
+
+wxPanel *Dashboard::createMyPatientsTab() {
+    wxPanel *panel = new wxPanel(notebook);
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    AddText(panel, sizer, "My Patients:", this->headingFont, 10);
+    AddText(panel, sizer, "Work in progress...", this->paraFont, 10);
+    panel->SetSizer(sizer);
+    return panel;
+};

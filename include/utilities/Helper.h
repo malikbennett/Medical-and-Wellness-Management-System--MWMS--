@@ -15,6 +15,15 @@ inline void DefaultChoice(wxChoice *&choice,const string &value){
         choice->Select(index);
 }
 
+inline void ADD_PAIR(wxWindow *parent,wxFlexGridSizer *&sizer,const wxString& label1, wxTextCtrl*& field1, const wxString& label2, wxTextCtrl*& field2){
+    sizer->Add(new wxStaticText(parent, wxID_ANY, label1), 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+    field1 = new wxTextCtrl(parent, wxID_ANY);
+    sizer->Add(field1, 1, wxEXPAND);
+    sizer->Add(new wxStaticText(parent, wxID_ANY, label2), 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+    field2 = new wxTextCtrl(parent, wxID_ANY);
+    sizer->Add(field2, 1, wxEXPAND);
+}
+
 inline void AddFormField(wxFlexGridSizer* sizer, wxWindow* parent, const wxString& label, wxTextCtrl*& ctrl, const wxString& defaultValue = "")
 {
     sizer->Add(new wxStaticText(parent, wxID_ANY, label), 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);

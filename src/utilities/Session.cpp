@@ -34,7 +34,9 @@ unsigned int Session::Login(string &username, string &password)
         username = padString(username, USERNAME_LENGTH);
         // Load user data from file
         vector<string> userInfo = UserManager::FindUserByUsername(username);
-        unAuthUser =  new User(userInfo);
+        if(userInfo.empty())
+            throw runtime_error("Username not found.");
+        unAuthUser = new User(userInfo);
         // Check if account is locked
         if (unAuthUser->locked())
             throw runtime_error("Unable to sign in user is locked. An admin is needed");
@@ -61,6 +63,69 @@ unsigned int Session::Login(string &username, string &password)
             throw runtime_error("User failed to initialize");
         delete unAuthUser;
         UserManager::resetAttempts(*currentUser);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+        wxMessageBox(e.what(), "Login Error", wxICON_ERROR);
+        return 1;
+    }
+    return 0;
+}
+
+unsigned int Session::Signup(vector<string> profile)
+{
+    try
+    {
+        // Delete previous session if exist
+        if (currentUser)
+        {
+            delete currentUser;
+            currentUser = nullptr;
+        }
+        // Validate user input
+        if (!UserManager::ValidateCredentials(profile))
+            return 1;
+        // Pad variables
+        profile[0] = padString(profile[0], USERNAME_LENGTH);
+        int userNumber = UserManager::getNewUserNumber();
+        int patientNumber = UserManager::getNewPatientNumber();
+        std::cout << userNumber << std::endl;
+        // Variable to store encryption key
+        string key;
+        // Get key from file
+        Encrypt::getInstance().readKeyFromFile("../../data/encryption.key", key);
+        // Encrypts the password the user gave us to we can check it against the one we have in our database
+        profile[1] = Encrypt::getInstance().xorEncryptDecrypt(profile[1], key);
+        profile[1] = padString(profile[1], PASSWORD_LENGTH);
+        Role role = Role::LoadRoleFromFile(Role::userRolePath, 7);
+        unAuthUser = new User(userNumber, profile[0], profile[1], role);
+        vector<string> profileRecord = {
+            to_string(userNumber),
+            to_string(patientNumber),
+            profile[2],
+            profile[3],
+            profile[4],
+            profile[5],
+            profile[6],
+            profile[7],
+            profile[8],
+            profile[9],
+            profile[10],
+            profile[11],
+            profile[12],
+            profile[13],
+            profile[14],
+            profile[15],
+        };
+        unAuthUser->setProfileRecords(profileRecord);
+        unAuthUser->setAttemptsRemaining(3);
+        unAuthUser->toggleLock(0);
+        currentUser = new Patient(*unAuthUser);
+        // Error if user is not created successfully
+        if (!currentUser)
+            throw runtime_error("User failed to initialize");
+        UserManager::saveUserData();
     }
     catch (const std::exception &e)
     {

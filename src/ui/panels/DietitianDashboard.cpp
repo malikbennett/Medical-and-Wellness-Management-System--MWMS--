@@ -12,25 +12,13 @@ void DietitianDashboard::buildUI()
     this->SetSizer(sizer);
 
     notebook->AddPage(createHomeTab(), "Home");
-    notebook->AddPage(createPatientsTab(), "Patients");
+    notebook->AddPage(createMyPatientsTab(), "Patients");
     notebook->AddPage(createAppointmentsTab(), "Appointments");
     notebook->AddPage(createDietPlansTab(), "DietPlans");
     notebook->AddPage(createNutritionHistoryTab(), "Nutrition History");
     // Add to Main Sizer
     sizer->Add(this->notebook, 1, wxEXPAND | wxALL);
 }
-wxPanel *DietitianDashboard::createPatientsTab() {
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetSizer(sizer);
-    return panel;
-};
-wxPanel *DietitianDashboard::createAppointmentsTab() {
-    wxPanel *panel = new wxPanel(notebook);
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    panel->SetSizer(sizer);
-    return panel;
-};
 wxPanel *DietitianDashboard::createDietPlansTab() {
     wxPanel *panel = new wxPanel(notebook);
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);

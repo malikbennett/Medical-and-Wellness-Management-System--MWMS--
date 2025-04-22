@@ -19,14 +19,22 @@ private:
 
 
 /* ---------------- Footer ---------------- */
+enum class FooterState { LOGIN, SIGNUP, DASHBOARD };
+
 class Footer : public wxPanel
 {
 public:
     Footer(wxPanel *parent);
-    void onLogout(wxCommandEvent &event);
     void buildUI();
+    wxButton* GetActionButton();
+    void updateForDashboard();
+    void SetState(FooterState state);
 
 private:
     wxPanel *parent;
-    wxButton* logoutBtn;
+    wxStaticText *infoText;
+    wxButton *actionBtn;
+    void updateForSignup(wxCommandEvent &event);
+    void updateForLogin(wxCommandEvent &event);
+    void onLogout(wxCommandEvent &event);
 };

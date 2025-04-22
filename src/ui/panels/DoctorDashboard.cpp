@@ -19,22 +19,17 @@ void DoctorDashboard::buildUI()
 
     // Add to Main Sizer
     sizer->Add(this->notebook, 1, wxEXPAND | wxALL);
-}
-wxPanel* DoctorDashboard::createMyPatientsTab(){
-wxPanel *panel = new wxPanel(notebook);
-wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-panel->SetSizer(sizer);
-return panel;
 };
-wxPanel* DoctorDashboard::createReferralsTab(){
-wxPanel *panel = new wxPanel(notebook);
-wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-panel->SetSizer(sizer);
-return panel;
+wxPanel *DoctorDashboard::createReferralsTab()
+{
+    wxPanel *panel = new wxPanel(notebook);
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    panel->SetSizer(sizer);
+    return panel;
 };
 wxPanel* DoctorDashboard::createPrescriptionsTab(){
-wxPanel *panel = new wxPanel(notebook);
-wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-panel->SetSizer(sizer);
-return panel;
+    wxPanel *panel = new wxPanel(notebook);
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    panel->SetSizer(sizer);
+    return panel;
 };

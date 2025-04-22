@@ -87,20 +87,6 @@ wxPanel *AdminDashboard::createManagePatientsTab()
     return panel;
 }
 
-// wxPanel *AdminDashboard::createAppointmentsTab()
-// {
-//     wxPanel *panel = new wxPanel(notebook);
-//     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-
-//     AddText(panel, sizer, "Appointment Management:", this->headingFont, 10);
-//     ListView *records = new ListView(panel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
-//     records->loadAppointmentsFields();
-//     records->RefreshAfterUpdate();
-//     sizer->Add(records,1,wxEXPAND);
-//     panel->SetSizer(sizer);
-//     return panel;
-// }
-
 wxPanel *AdminDashboard::createMedicationsTab()
 {
     wxPanel *panel = new wxPanel(notebook);
@@ -108,6 +94,8 @@ wxPanel *AdminDashboard::createMedicationsTab()
 
     AddText(panel, sizer, "Medication Inventory:", this->headingFont, 10);
     // TODO: Medication table + stock tracking
+    ListView *list = new ListView(panel,wxID_ANY,wxDefaultPosition,wxDefaultSize);
+    // list->RefreshAfterUpdate();
 
     panel->SetSizer(sizer);
     return panel;
@@ -119,7 +107,7 @@ wxPanel *AdminDashboard::createReportsTab()
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
     AddText(panel, sizer, "Reports & Logs:", this->headingFont, 10);
-    // TODO: Export buttons, report filters
+    AddText(panel, sizer, "Work in progress...", this->paraFont, 10);
 
     panel->SetSizer(sizer);
     return panel;

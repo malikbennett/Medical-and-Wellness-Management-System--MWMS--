@@ -14,8 +14,11 @@ public:
     static vector<string> FindUserByUsername(const string &username                                                                                                     );
     static void LoadUserData(User &data);
     static vector<User*> getAllUsers(int roleNumber = 0);
+    static int getNewUserNumber();
+    static int getNewPatientNumber();
     // Validates user input before authent                                                                                                                                                      ication
     static bool ValidateCredentials(const string &username, const string &password);
+    static bool ValidateCredentials(const vector<string> profile);
     // Increments failed login attempts
     static void decrementAttempts(User &data);
     // reset failed login attempts

@@ -104,7 +104,9 @@ vector<string> UserManager::FindUserByUsername(const string &username)
     catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
+        wxMessageBox(e.what(), "Login Error: ", wxICON_ERROR);
     }
+    fields.clear();
     return fields;
 }
 
@@ -176,6 +178,137 @@ bool UserManager::ValidateCredentials(const string &username, const string &pass
             throw runtime_error("Input cannot be empty");
         }
         return true;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+        wxMessageBox(e.what(), "Login Error", wxICON_ERROR);
+        return false;
+    }
+    return false;
+}
+
+int  UserManager::getNewUserNumber()
+{
+    try
+    {
+        // width of each field
+        const int userFieldWidths[6] = {USER_NUMBER_LENGTH, USERNAME_LENGTH, PASSWORD_LENGTH, ROLE_NUMBER_LENGTH, ATTEMPTS_REMAINING_LENGTH, ACCOUNT_LOCKED_LENGTH};
+        int colSize = getFileFields(userInfoPath).size();
+        // total line size + colSize(to account for ',')
+        int userTotalWidth = colSize;
+        for (auto &field : userFieldWidths)
+        {
+            userTotalWidth += field;
+        }
+        ifstream file(userInfoPath, ios::in | ios::binary);
+        if (!file.is_open())
+            throw runtime_error("User info file failed to open");
+
+        string header;
+        getline(file, header); // Skip variable-length header line
+
+        streampos start = file.tellg(); // Marks start of fixed-length records
+
+        file.seekg(0, ios::end);
+        streampos end = file.tellg();
+
+        int recordSize = userTotalWidth + 1; // +1 for newline
+
+        streamoff dataSize = end - start;
+
+        if (dataSize < recordSize)
+            return 1; // No actual data records
+
+        int totalRecords = dataSize / recordSize;
+
+        // Go to the last record
+        file.seekg(start + static_cast<streamoff>((totalRecords - 1) * recordSize), ios::beg);
+
+        string lastLine(recordSize, '\0');
+        file.read(&lastLine[0], recordSize);
+        file.close();
+
+        // Extract and return user number
+        string userNumStr = trimString(lastLine.substr(0, userFieldWidths[0]));
+        int i = stoi(userNumStr) + 1;
+        return i;
+    }
+    catch (const exception &e)
+    {
+        cerr << "Error: " << e.what() << endl;
+        return 1;
+    }
+}
+
+int  UserManager::getNewPatientNumber()
+{
+    try
+    {
+        // width of each field
+        const int patientFieldWidths[16] = {
+            USER_NUMBER_LENGTH, USER_NUMBER_LENGTH, NAME_LENGTH, NAME_LENGTH, NAME_LENGTH, TRN_LENGTH,
+            DATE_LENGTH, DATE_LENGTH, GENDER_LENGTH, MARTIAL_STATUS_LENGTH, NOK_LENGTH, PHONE_NUMBER_LENGTH,
+            MEDICAL_HISTORY_LENGTH, EMAIL_ADDRESS_LENGTH, PHONE_NUMBER_LENGTH, ADDRESS_LENGTH};
+        int colSize = getFileFields(patientInfoPath).size();
+        // total line size + colSize(to account for ',')
+        int patientTotalWidth = colSize;
+        for (auto &field : patientFieldWidths)
+        {
+            patientTotalWidth += field;
+        }
+        ifstream file(patientInfoPath, ios::in | ios::binary);
+        if (!file.is_open())
+            throw runtime_error("User info file failed to open");
+
+        string header;
+        getline(file, header); // Skip variable-length header line
+
+        streampos start = file.tellg(); // Marks start of fixed-length records
+
+        file.seekg(0, ios::end);
+        streampos end = file.tellg();
+
+        int recordSize = patientTotalWidth + 1; // +1 for newline
+
+        streamoff dataSize = end - start;
+
+        if (dataSize < recordSize)
+            return 1; // No actual data records
+
+        int totalRecords = dataSize / recordSize;
+
+        // Go to the last record
+        file.seekg(start + static_cast<streamoff>((totalRecords - 1) * recordSize), ios::beg);
+
+        string lastLine(recordSize, '\0');
+        file.read(&lastLine[0], recordSize);
+        file.close();
+
+        // Extract and return user number
+        string patientNumStr = trimString(lastLine.substr(patientFieldWidths[0] + 1, patientFieldWidths[1]));
+        int i = stoi(patientNumStr) + 1;
+        return i;
+    }
+    catch (const exception &e)
+    {
+        cerr << "Error: " << e.what() << endl;
+        return 1;
+    }
+}
+
+bool UserManager::ValidateCredentials(const vector<string> profile)
+{
+    try
+    {
+        for(auto &field : profile){
+            // Checks if user input is empty
+            if (field.empty())
+            {
+                throw runtime_error("Input cannot be empty");
+            }
+            return true;
+        }
     }
     catch (const std::exception &e)
     {
@@ -265,6 +398,11 @@ void UserManager::saveUserData(const User &userData)
         {
             int recordSize = userTotalWidth + 1;
             file.seekp(start + static_cast<streamoff>(lineNum * recordSize), ios::beg);
+            file << record << '\n';
+        }else{
+            // Append new line at end
+            file.clear(); // Clear EOF flag
+            file.seekp(0, ios::end);
             file << record << '\n';
         }
         file.close();
@@ -382,7 +520,12 @@ void UserManager::saveUserData(const User &userData)
                 int recordSize = profileTotalWidth + 1; // +1 for newline
                 file.seekp(start + static_cast<streamoff>(lineNum * recordSize), ios::beg);
                 file << profileRecord << '\n'; // overwrite
-            }
+            }else{
+            // Append new line at end
+            file.clear(); // Clear EOF flag
+            file.seekp(0, ios::end);
+            file << profileRecord << '\n';
+        }
             file.close();
         }
     }

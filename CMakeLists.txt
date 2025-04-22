@@ -20,6 +20,7 @@ set(SOURCES
     src/ui/panels/DietitianDashboard.cpp
     src/ui/panels/DoctorDashboard.cpp
     src/ui/panels/LoginPanel.cpp
+    src/ui/panels/SignupPanel.cpp
     src/ui/panels/NurseDashboard.cpp
     src/ui/panels/PatientDashboard.cpp
     src/ui/panels/PsychologistDashboard.cpp

@@ -25,7 +25,7 @@ struct ColorPalette {
 };
 
 constexpr int BASIC_LENGTH_10 = 10;
-constexpr int BASIC_LENGTH_12 = 16;
+constexpr int BASIC_LENGTH_12 = 12;
 constexpr int BASIC_LENGTH_16 = 16;
 constexpr int BASIC_LENGTH_32 = 32;
 constexpr int BASIC_LENGTH_64 = 64;

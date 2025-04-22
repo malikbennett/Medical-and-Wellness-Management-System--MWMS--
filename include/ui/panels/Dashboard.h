@@ -15,9 +15,8 @@ public:
     wxPanel *createAppointmentsTab();
     wxPanel *createMedicationsTab();
     wxPanel *createReportsTab();
-    wxPanel* createMyPatientsTab();
-    wxPanel* createReferralsTab();
-    wxPanel* createPrescriptionsTab();
+    wxPanel *createMyPatientsTab();
+    wxPanel *createReferralsTab();
 
 private:
     wxPanel *parent;
@@ -48,11 +47,8 @@ class DietitianDashboard : public Dashboard
 public:
     DietitianDashboard(wxPanel *parent);
     void buildUI() override;
-    wxPanel* createPatientsTab();
-    wxPanel* createAppointmentsTab();
     wxPanel* createDietPlansTab();
     wxPanel* createNutritionHistoryTab();
-
 };
 /* ---------------- Doctor Dashboard ---------------- */
 class DoctorDashboard : public Dashboard
@@ -60,7 +56,6 @@ class DoctorDashboard : public Dashboard
 public:
     DoctorDashboard(wxPanel *parent);
     void buildUI() override;
-    wxPanel* createMyPatientsTab();
     wxPanel* createReferralsTab();
     wxPanel* createPrescriptionsTab();
 
@@ -91,7 +86,6 @@ public:
     PsychologistDashboard(wxPanel *parent);
     void buildUI() override;
     wxPanel* createMyPatientsTab();
-    wxPanel* createAppointmentsTab();
     wxPanel* createSessionNotesTab();
     wxPanel* createReferralsTab();
 
@@ -103,6 +97,5 @@ public:
     ReceptionistDashboard(wxPanel *parent);
     void buildUI() override;
     wxPanel* createPatientRegistryTab();
-    wxPanel* createAppointmentsTab();
     wxPanel* createVisitorLogTab();
 };

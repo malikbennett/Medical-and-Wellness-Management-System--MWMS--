@@ -14,9 +14,9 @@ LoginPanel::LoginPanel(wxPanel *parent) : wxPanel(parent, wxID_ANY, wxDefaultPos
 
 void LoginPanel::buildUI()
 {
-    this->SetBackgroundColour(Settings::getInstance().colors.surface);
-
     const int margin = 20;
+
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     // Create the sizer that will arrange items vertically
     wxBoxSizer *loginSizer = new wxBoxSizer(wxVERTICAL);
@@ -25,17 +25,13 @@ void LoginPanel::buildUI()
     firstHeader->SetFont(wxFont(18, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     wxStaticText *subText = new wxStaticText(this, wxID_ANY, "Enter your credential to access your account.", wxDefaultPosition,wxDefaultSize,wxALIGN_CENTER);
     subText->SetFont(wxFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-    subText->SetForegroundColour(Settings::getInstance().colors.textSecondaryDark);
+    subText->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     subText->Wrap(300);
 
     this->usernameField = new wxTextCtrl(this, wxID_ANY, "");
-    this->usernameField->SetBackgroundColour(Settings::getInstance().colors.textSecondaryLight);
-    this->usernameField->SetForegroundColour(Settings::getInstance().colors.textPrimary);
     this->usernameField->SetHint("Enter username");
 
     this->passwordField = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
-    this->passwordField->SetBackgroundColour(Settings::getInstance().colors.textSecondaryLight);
-    this->passwordField->SetForegroundColour(Settings::getInstance().colors.textPrimary);
     this->passwordField->SetHint("Enter password");
 
     this->loginBtn = new wxButton(this, wxID_OK, "Login");
